@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environment
+venv/
+.env
+
+# FastAPI
+*.log
+*.db
+*.sqlite3
+instance/
+
+# Docker
+docker-compose.override.yml
+
+# IDE & OS
+.vscode/
+.DS_Store
