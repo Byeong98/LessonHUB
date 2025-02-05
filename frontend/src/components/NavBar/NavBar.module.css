@@ -1,0 +1,23 @@
+.heder {
+    background-color: rgba(47,70,154,1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.title_link {
+    margin: 0 2%;
+}
+
+.title {
+    margin: 0;
+}
+
+.lgin_container {
+    display: flex;
+}
+
+.lgin_container a {
+    padding: 0 5px;
+}

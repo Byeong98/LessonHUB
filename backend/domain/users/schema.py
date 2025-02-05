@@ -8,7 +8,6 @@ class UserCreate(BaseModel):
     email : EmailStr
     password1 : str
     password2 : str
-
     @field_validator('email', 'password1', 'password2')
     def validate_password1(cls, v):
         if not v or not v.strip():
