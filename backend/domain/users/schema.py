@@ -12,6 +12,8 @@ class UserCreate(BaseModel):
     def validate_password1(cls, v):
         if not v or not v.strip():
             raise ValueError('빈 값은 허용되지 않습니다.')
+        if len(v) < 8:
+            raise ValueError('비번호는 8자 이상으로 설정하세요.')
         return v
     
     @field_validator('password2')

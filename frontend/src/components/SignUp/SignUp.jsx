@@ -21,7 +21,24 @@ const InputContainer = () => {
         setFormData({ ...formData, [name]: value });
     };
 
+    const validate_data = () => {
+        if (!email) {
+            alert('E-mail을 입력하세요.');
+            return false;
+        }
+        if (!password1) {
+            alert('번호를 입력하세요.');
+            return false;
+        }
+        if (password1.length < 8 || password1.length > 20) {
+            alert('비번호는 8자 이상 20자 이하로 입력하세요');
+            return false;
+        }
+        return true;
+    }
+
     const handlSignUP = async () => {
+        if (!validate_data()) return;
         try {
             const response = await axios.post(
                 "http://127.0.0.1:8000/api/user/create",
@@ -43,7 +60,7 @@ const InputContainer = () => {
                     alert(errorDetail[0].msg.replace(/^.*?,\s*/, '', ''));
                 } else if (errorStatus === 409) {
                     alert(errorDetail);
-                } 
+                }
             } else {
                 alert('서버 연결 실패');
             }

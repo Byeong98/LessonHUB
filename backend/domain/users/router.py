@@ -30,11 +30,18 @@ def user_create(_user_create: schema.UserCreate, db: Session = Depends(get_db)):
 # 로그인
 @router.post('/login',response_model=schema.Token)
 def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(),db: Session = Depends(get_db)):
+    if not form_data.username or not form_data.password:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail='Email 또는 Password를 입력해 주세요',
+                            headers={"WWW-Authenticate": "Bearer"})
+
+    # 사용자 조회
     user = crud.get_user(db, form_data.username)
     if not user or not pwd_context.verify(form_data.password, user.password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                            detail='Incorrect username or password',
+                            detail='사용자를 찾을 수 없습니다.',
                             headers={"WWW-Authenticate": "Bearer"})
+
     data = {
         "sub": user.email,
         "exp": datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)

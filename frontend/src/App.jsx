@@ -7,21 +7,24 @@ import TeachDetail from './components/TeachDetail/TeachDetail'
 import Login from './components/Login/Login'
 import NavBar from './components/NavBar/NavBar'
 import SignUp from './components/SignUp/SignUp'
+import { AuthProvider } from './AuthProvider';
 
 function App() {
   return (
-    <Router>
-      <NavBar />
-      <div className="routes_container">
-        <Routes >
-          <Route path="/" element={<TeachList />} />
-          <Route path="/teach/create" element={<TeachCreate />} />
-          <Route path="/teach/detail/:id" element={<TeachDetail />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-        </Routes>
-      </div>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <NavBar />
+        <div className="routes_container">
+          <Routes >
+            <Route path="/" element={<TeachList />} />
+            <Route path="/teach/create" element={<TeachCreate />} />
+            <Route path="/teach/detail/:id" element={<TeachDetail />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+          </Routes>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
 
