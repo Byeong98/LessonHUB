@@ -1,4 +1,4 @@
-.heder {
+.header {
     background-color: rgba(47,70,154,1);
     display: flex;
     justify-content: space-between;
@@ -20,4 +20,20 @@
 
 .lgin_container a {
     padding: 0 5px;
+}
+
+/* 로그아웃 */
+.prople{
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+}
+
+.userEmail{
+    padding: 0 15px 0 5px;
+    margin: 0;
+    font-size: 20px;
+    color: white;
+    display: flex;
+    align-items: center;
 }

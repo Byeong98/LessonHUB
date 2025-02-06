@@ -47,8 +47,6 @@ const InputContainer = () => {
           }
         }
       )
-      if (response.data) {
-      }
       // 토큰, 이메일 storage에 저장
       Object.entries(response.data).forEach(([key, value]) => {
         localStorage.setItem(key, value);

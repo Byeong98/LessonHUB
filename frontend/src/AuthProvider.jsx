@@ -7,14 +7,14 @@ export const AuthProvider = ({ children }) => {
     const [userEmail, setUserEmail] = useState(null);
 
     useEffect(() => {
-        const token = localStorage.getItem('accessToken');
+        const token = localStorage.getItem('access_token');
         const email = localStorage.getItem('email');
 
         if (token && email) {
             setAccessToken(token);
             setUserEmail(email);
         };
-        
+        console.log(email)
     }, []);
 
     return (
