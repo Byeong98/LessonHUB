@@ -1,0 +1,21 @@
+.container{
+    flex-direction: column;
+    flex-grow: 1;
+    flex-shrink: 0;
+    justify-content: safe center;
+    align-items: safe center;
+    display: flex;
+}
+
+.input_Container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.h2{
+    margin: 0;
+}
+
