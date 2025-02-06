@@ -1,0 +1,11 @@
+.App {
+  text-align: center;
+}
+
+.routes_container {
+  box-sizing: border-box;
+  flex-direction: column;
+  align-items: stretch;
+  min-height: 100vh;
+  display: flex
+}
