@@ -5,9 +5,9 @@ from config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 from fastapi import APIRouter, HTTPException
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordRequestForm
-from jose import jwt
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
+from jose import jwt
 from passlib.hash import pbkdf2_sha256 as pwd_context
 
 from database import get_db
@@ -19,24 +19,28 @@ router = APIRouter(
 
 # 회원가입
 @router.post("/create", status_code=status.HTTP_204_NO_CONTENT)
-def user_create(_user_create: schema.UserCreate, db: Session = Depends(get_db)):
-    user = crud.get_existing_user(db, user_create=_user_create)
+async def user_create(_user_create: schema.UserCreate, db: AsyncSession = Depends(get_db)):
+    # 이메일 중복 확인
+    user = await crud.get_existing_user(db=db, email=_user_create.email)
     if user:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT,
-                            detail="이미 존재하는 사용자입니다.")
-    else:
-        crud.create_user(db=db, user_create=_user_create)
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="이미 존재하는 사용자입니다."
+        )
+    
+    # 새로운 사용자 생성
+    await crud.create_user(db=db, user_create=_user_create)
 
 # 로그인
 @router.post('/login',response_model=schema.Token)
-def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(),db: Session = Depends(get_db)):
+async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(),db: AsyncSession = Depends(get_db)):
     if not form_data.username or not form_data.password:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail='Email 또는 Password를 입력해 주세요',
                             headers={"WWW-Authenticate": "Bearer"})
 
     # 사용자 조회
-    user = crud.get_user(db, form_data.username)
+    user = await crud.get_user(db, form_data.username)
     if not user or not pwd_context.verify(form_data.password, user.password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail='사용자를 찾을 수 없습니다.',
