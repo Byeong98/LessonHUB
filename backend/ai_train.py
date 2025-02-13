@@ -1,8 +1,8 @@
 import json
 from openai import OpenAI
-from config import API_KEY
+from config import OPENAI_API_KEY
 
-client = OpenAI(api_key=API_KEY)
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 # 데이터 가져오기
 filename = "data_FTuning.json"
