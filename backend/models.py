@@ -31,7 +31,7 @@ class Teach(Base):
     user_id = Column(Integer, ForeignKey("user.id"), nullable=False)
 
     user = relationship("User", back_populates="teaches")
-    unit = relationship("Unit", back_populates="teaches")
+    unit = relationship("Unit", back_populates="teach_list")
 
 
 # 과목 모델
@@ -65,7 +65,7 @@ class Unit(Base):
 
     session = relationship("Session", back_populates="units")
     standards = relationship("Standard", back_populates="unit")
-
+    teach_list = relationship("Teach", back_populates="unit")
 
 # 성취기준 모델
 class Standard(Base):
