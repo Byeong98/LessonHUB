@@ -20,6 +20,7 @@ class Teaches(Base):
     __tablename__ = "teaches"
 
     id = Column(Integer, primary_key=True)
+    grade_id = Column(Integer, ForeignKey("grades.id"), nullable=False)  # 학년
     subject = Column(String, nullable=False)  # 과목
     session = Column(String, nullable=False)  # 과목 상세 (예: 국어, 수학 ...)
     unit_id = Column(Integer, ForeignKey("units.id"), nullable=False)  # 단원
@@ -33,6 +34,16 @@ class Teaches(Base):
 
     user = relationship("Users", back_populates="teaches")
     unit = relationship("Units", back_populates="teach_list")
+    grade = relationship("Grades", back_populates="teach_list")
+
+
+class Grades(Base):
+    __tablename__ = "grades"
+
+    id = Column(Integer, primary_key=True)
+    title = Column(String, nullable=False)
+
+    teach_list = relationship("Teaches", back_populates="grade")
 
 
 # 과목 모델
