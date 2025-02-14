@@ -24,6 +24,7 @@ class Teaches(Base):
     session = Column(String, nullable=False)  # 과목 상세 (예: 국어, 수학 ...)
     unit_id = Column(Integer, ForeignKey("units.id"), nullable=False)  # 단원
     title = Column(String, nullable=False)  # 제목
+    objective = Column(Text, nullable=False)  # 학습목표
     intro = Column(Text, nullable=False)  # 도입
     deployment = Column(Text, nullable=False)  # 전개
     finish = Column(Text, nullable=False)  # 정리
