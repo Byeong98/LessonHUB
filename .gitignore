@@ -24,3 +24,6 @@ docker-compose.override.yml
 
 #data
 data_FTuning.json
+teach_data.json
+commentary_data.json
+teach_data
