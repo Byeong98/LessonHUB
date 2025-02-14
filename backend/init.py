@@ -7,9 +7,9 @@ import json
 import asyncio
 import re
 
-with open('teach_data.json', 'r', encoding='utf-8') as f:
+with open('teach_data/teach_data.json', 'r', encoding='utf-8') as f:
     data = json.load(f)
-with open('commentary_data.json', 'r', encoding='utf-8') as f:
+with open('teach_data/commentary_data.json', 'r', encoding='utf-8') as f:
     commentary_data = json.load(f)
 
 
@@ -31,31 +31,31 @@ async def add_data(model, data,):
 
 async def csreate_data(data):
     for subject, sessions in data.items():
-        vaildate = await Validation_data(Subject, subject)
+        vaildate = await Validation_data(Subjects, subject)
         if vaildate:
             print(f'{subject} 데이터 존제')
             break
-        query = insert(Subject).values(title=subject).returning(Subject.id)
+        query = insert(Subjects).values(title=subject).returning(Subjects.id)
         result = await db.execute(query)
         await db.commit()
         subject_id = result.scalar()
 
         for session, units in sessions.items():
-            query = insert(Session).values(
-                title=session, subject_id=subject_id).returning(Session.id)
+            query = insert(Sessions).values(
+                title=session, subject_id=subject_id).returning(Sessions.id)
             result = await db.execute(query)
             await db.commit()
             session_id = result.scalar()
 
             for unit, standards in units.items():
-                query = insert(Unit).values(
-                    title=unit, session_id=session_id).returning(Unit.id)
+                query = insert(Units).values(
+                    title=unit, session_id=session_id).returning(Units.id)
                 result = await db.execute(query)
                 await db.commit()
                 unit_id = result.scalar()
 
                 for standard in standards:
-                    query = insert(Standard).values(
+                    query = insert(Standards).values(
                         title=standard, unit_id=unit_id)
                     await db.execute(query)
                     await db.commit()
@@ -68,12 +68,12 @@ async def create_commentary(commentary_data):
         match = re.search(r"\[(.*?)\]", commentary)
         if match:
             commentary_title = match.group(1)
-            query = select(Standard).filter(
-                Standard.title.like(f"[%{commentary_title}%]%"))
+            query = select(Standards).filter(
+                Standards.title.like(f"[%{commentary_title}%]%"))
             result = await db.execute(query)
             standard = result.scalars().first()
             if standard:
-                query = insert(Commentary).values(
+                query = insert(Commentaries).values(
                     title=commentary, standard_id=standard.id)
                 await db.execute(query)
                 await db.commit()

@@ -7,11 +7,11 @@ from sqlalchemy import insert, select
 from passlib.hash import pbkdf2_sha256 as pwd_context
 
 from domain.users.schema import UserCreate
-from models import User
+from models import Users
 
 # 회원가입
 async def create_user(db: AsyncSession, user_create: UserCreate):
-    query = insert(User).values(
+    query = insert(Users).values(
         email=user_create.email,
         password=pwd_context.hash(user_create.password1),
         create_at=datetime.now()
@@ -21,11 +21,11 @@ async def create_user(db: AsyncSession, user_create: UserCreate):
 
 # 이메일 중복 확인
 async def get_existing_user(db: AsyncSession, email: str):
-    query = select(User).where(User.email == email)
+    query = select(Users).where(Users.email == email)
     result = await db.execute(query)
     return result.scalar()
 
 async def get_user(db: AsyncSession, email: str):
-    query = select(User).filter(User.email == email)
+    query = select(Users).filter(Users.email == email)
     result = await db.execute(query)
     return result.scalar()
