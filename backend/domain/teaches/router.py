@@ -37,6 +37,9 @@ async def teach_create(teach_create: schema.TeachCreate,
         if standard:
             standard_str += f"{standard.title},"
 
+    # 학년 조회
+    grade = await crud.get_grade(db=db, grade_id=teach_create.grade)
+
     # OpenAI API 요청보내기
     completion = client.chat.completions.create(
         model="gpt-4o-mini",
@@ -46,19 +49,20 @@ async def teach_create(teach_create: schema.TeachCreate,
                 "role": "system",
                 "content": "당신은 친절하고 정확한 교수안 작성 도우미입니다. "
                 "주어진 성취기준과 성취기준 해설을 바탕으로 잘 구조화된 교수안을 작성해야 합니다. "
-                "교수안은 과목, 과목상세, 단원, 제목, 학습목표, 도입, 전개, 정리, 참고자료로 구성됩니다."
+                "교수안은 학년, 과목, 과목상세, 단원, 제목, 학습목표, 도입, 전개, 정리, 참고자료로 구성됩니다."
                 "You are a helpful assistant designed to output JSON."
             },
             {
                 "role": "user",
                 "content": 
+                f"학년: {grade.title}\n"
                 f"과목: {teach_create.subject}\n"
                 f"과목상세: {teach_create.session}\n"
                 f"단원: {teach_create.unit}\n"
                 f"성취기준: {standard_str}\n"
                 f"성취기준해설: {commentary_str}\n"
                 f"성취기준과 성취기준 해설을 보고 교수안을 작성해줘."
-                "{과목: string..., 과목상세: string..., 단원: string... , 제목: string..., 학습목표: [string ...], 도입: [string ...], 전개: [string ...], 정리: [string ...]} "
+                "{학년: string..., 과목: string..., 과목상세: string..., 단원: string... , 제목: string..., 학습목표: [string ...], 도입: [string ...], 전개: [string ...], 정리: [string ...]} "
             }
         ],
     )
@@ -75,7 +79,8 @@ async def teach_create(teach_create: schema.TeachCreate,
         db=db,
         response_json=response_json,
         current_user_id=current_user.id,
-        unit_id=teach_create.unit_id
+        unit_id=teach_create.unit_id,
+        grade_id=grade.id
     )
     return response_json
 
