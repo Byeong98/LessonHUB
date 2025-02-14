@@ -4,9 +4,9 @@ from config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 
 from fastapi import APIRouter, HTTPException
 from fastapi import Depends
-from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
+from fastapi.security import OAuth2PasswordRequestForm
 from jose import jwt
 from passlib.hash import pbkdf2_sha256 as pwd_context
 

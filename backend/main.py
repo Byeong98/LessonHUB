@@ -1,7 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from starlette.middleware.cors import CORSMiddleware
 
 from domain.users import router as users_router
+from domain.teaches import router as teach_router
 
 app = FastAPI()
 
@@ -15,4 +16,5 @@ app.add_middleware(
 )
 
 app.include_router(users_router.router)
+app.include_router(teach_router.router)
 
