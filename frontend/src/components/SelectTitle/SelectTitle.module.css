@@ -1,0 +1,40 @@
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.container label {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+/* .select option:first-child {
+    color:  rgba(245, 245, 245, 1)
+} */
+
+.select {
+    height: 30px;
+    width: 100%;
+    background-color: rgba(245, 245, 245, 1);
+    border-radius: 8px;
+    padding: 0 5px;
+    font-size: 16px;
+    font-weight: 700;
+    color: rgba(30, 30, 30, 1);
+    cursor: pointer;
+}
+
+/* .select:focus {
+    outline: none;
+} */
+
+/* 값이 선택되었을 때 */
+.selected {
+    border: 2px solid rgba(47, 70, 154, 1);
+}
+
+
+/* 크기 선택 */
+.small {
+    width: 130px;
+}
