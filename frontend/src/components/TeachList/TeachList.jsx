@@ -7,7 +7,7 @@ import Border from '../Border/Border'
 const TeachForm = ({id}) => {
   return (
     <Link to={`/teach/detail/${id}`}> 
-      <Border style='TeachingForm' bgColor="rgba(245,245,245,1)">
+      <Border style='login' bgColor="rgba(245,245,245,1)">
         <div>
           <p>제목</p>
           <p>학년</p>
@@ -23,7 +23,7 @@ const TeachForm = ({id}) => {
 const AddTeachForm = () => {
   return (
     <Link to="/teach/create">
-      <Border style='TeachingForm' bgColor="rgba(245,245,245,1)">
+      <Border style='login' bgColor="rgba(245,245,245,1)">
         <div>
           <p>+</p>
           <p>추가하기</p>

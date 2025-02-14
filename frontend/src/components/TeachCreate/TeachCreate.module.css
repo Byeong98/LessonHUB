@@ -1,0 +1,36 @@
+.container{
+    flex-direction: column;
+    flex-grow: 1;
+    flex-shrink: 0;
+    justify-content: safe center;
+    align-items: safe center;
+    display: flex;
+}
+.content_container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.content_container h3 {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 900;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.select_container {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center; 
+    margin: 10px 0;
+    width: 100%; 
+}
+
+.button_container{
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
