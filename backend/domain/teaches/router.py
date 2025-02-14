@@ -18,8 +18,6 @@ router = APIRouter(
     prefix="/api/teach"
 )
 # 교수안 생성
-from typing import Annotated
-
 @router.post("/create", status_code=status.HTTP_200_OK)
 async def teach_create(teach_create: schema.TeachCreate,
                         db: AsyncSession = Depends(get_db),
@@ -37,8 +35,11 @@ async def teach_create(teach_create: schema.TeachCreate,
         if standard:
             standard_str += f"{standard.title},"
 
-    # 학년 조회
-    grade = await crud.get_grade(db=db, grade_id=teach_create.grade)
+    # 학년 조회 or 단원 조회
+    grade = await crud.get_grade(db=db, grade_id=teach_create.grade_id)
+    unit = await crud.get_unit(db=db, unit_id=teach_create.unit_id)
+    if not grade or not unit:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="학년, 단원 조회 불가")
 
     # OpenAI API 요청보내기
     completion = client.chat.completions.create(
@@ -58,7 +59,7 @@ async def teach_create(teach_create: schema.TeachCreate,
                 f"학년: {grade.title}\n"
                 f"과목: {teach_create.subject}\n"
                 f"과목상세: {teach_create.session}\n"
-                f"단원: {teach_create.unit}\n"
+                f"단원: {unit.title}\n"
                 f"성취기준: {standard_str}\n"
                 f"성취기준해설: {commentary_str}\n"
                 f"성취기준과 성취기준 해설을 보고 교수안을 작성해줘."
@@ -79,7 +80,7 @@ async def teach_create(teach_create: schema.TeachCreate,
         db=db,
         response_json=response_json,
         current_user_id=current_user.id,
-        unit_id=teach_create.unit_id,
+        unit_id=unit.id,
         grade_id=grade.id
     )
     return response_json

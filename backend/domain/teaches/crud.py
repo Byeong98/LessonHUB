@@ -31,20 +31,18 @@ async def create_teach(db: AsyncSession,
     await db.commit()
 
 # 학년 조회
-
-
 async def get_grade(db: AsyncSession, grade_id: int):
     query = select(Grades).filter(Grades.id == grade_id)
     result = await db.execute(query)
     return result.scalars().first()
 
-# 과목 조회
+# 과목 리스트 조회
 async def get_subjects_list(db: AsyncSession):
     query = select(Subjects).order_by(Subjects.title)
     result = await db.execute(query)
     return result.scalars().all()
 
-# 과목 상세 조회
+# 과목 상세 리스트 조회
 async def get_sission_list(db: AsyncSession, subject_id: int):
     query = select(Sessions).filter(Sessions.subject_id ==
                                     subject_id).order_by(Sessions.id)
@@ -57,7 +55,7 @@ async def get_unit_list(db: AsyncSession, session_id: int):
                                 session_id).order_by(Units.id)
     result = await db.execute(query)
     return result.scalars().all()
-
+#단원 조회 
 async def get_unit(db: AsyncSession, unit_id: int):
     query = select(Units).filter(Units.id == unit_id)
     result = await db.execute(query)
