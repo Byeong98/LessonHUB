@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
+from typing import Annotated
 import json
 
 from database import get_db
@@ -20,8 +21,8 @@ router = APIRouter(
 # 교수안 생성
 @router.post("/create", status_code=status.HTTP_200_OK)
 async def teach_create(teach_create: schema.TeachCreate,
-                        db: AsyncSession = Depends(get_db),
-                        current_user: Users = Depends(get_current_user)
+                        current_user: Annotated[Users, Depends(get_current_user)],
+                        db: AsyncSession = Depends(get_db)
                         ):
     # 성취기준 + 해설 찾기
     commentary_str = "" 
@@ -38,10 +39,10 @@ async def teach_create(teach_create: schema.TeachCreate,
     # 학년, 과목, 과목상세, 단원 조회,
     grade = await crud.get_title(db=db, model = Grades, id=teach_create.grade_id)
     subject = await crud.get_title(db=db, model= Subjects, id=teach_create.subject_id)
-    session = await crud.get_title(db=db, model= Sessions ,id=teach_create.session_id)
+    section = await crud.get_title(db=db, model= Sections ,id=teach_create.section_id)
     unit = await crud.get_title(db=db, model= Units, id=teach_create.unit_id)
 
-    if not grade or not unit or not subject or not session:
+    if not grade or not unit or not subject or not section:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="학년, 단원 조회 불가")
 
     # OpenAI API 요청보내기
@@ -61,7 +62,7 @@ async def teach_create(teach_create: schema.TeachCreate,
                 "content": 
                 f"학년: {grade.title}\n"
                 f"과목: {subject.title}\n"
-                f"과목상세: {session.title}\n"
+                f"과목상세: {section.title}\n"
                 f"단원: {unit.title}\n"
                 f"성취기준: {standard_str}\n"
                 f"성취기준해설: {commentary_str}\n"
@@ -82,11 +83,30 @@ async def teach_create(teach_create: schema.TeachCreate,
     await crud.create_teach(
         db=db,
         response_json=response_json,
-        current_user_id=current_user.id,
+        current_user_id=1,
         unit_id=unit.id,
         grade_id=grade.id
     )
     return response_json
+
+@router.get("/", response_model=list[schema.TeachList])
+async def teach_list(current_user: Annotated[Users, Depends(get_current_user)],
+                    db: AsyncSession = Depends(get_db), 
+                    ):
+    teaches = await crud.get_teach_list(db=db, id=current_user.id)
+    data = []
+    for teach in teaches:
+        data.append({
+            "id": teach.id,
+            "grade": teach.grade.title,
+            "subject": teach.subject,
+            "section": teach.section,
+            "unit": teach.unit.title,
+            "title": teach.title,
+            "date": teach.create_at.strftime("%Y-%m-%d")
+        })
+    return data
+
 
 #학년 조회
 @router.get("/grades", response_model=list[schema.Grades])
@@ -103,21 +123,30 @@ async def subjects_list(db: AsyncSession = Depends(get_db)):
 
 
 # 과목상세 조회
-@router.get("/{subject_id}/sections", response_model=list[schema.Sessions])
+@router.get("/{subject_id}/sections", response_model=list[schema.Sections])
 async def section_list(subject_id: int, db: AsyncSession = Depends(get_db)):
-    sections = await crud.get_sission_list(db=db, subject_id=subject_id)
+    sections = await crud.get_filter_list(db=db, 
+                                        model= Sections,
+                                        filter_field="subject_id",
+                                        id=subject_id)
     return sections
 
 
 # 단원 조회
-@router.get("/{session_id}/units", response_model=list[schema.Units])
-async def unit_list(session_id: int, db: AsyncSession = Depends(get_db)):
-    units = await crud.get_unit_list(db=db, session_id=session_id)
+@router.get("/{section_id}/units", response_model=list[schema.Units])
+async def unit_list(section_id: int, db: AsyncSession = Depends(get_db)):
+    units = await crud.get_filter_list(db=db, 
+                                    model=Units,
+                                    filter_field="section_id",
+                                    id=section_id)
     return units
 
 
 # 성취기준 조회
 @router.get("/{unit_id}/standards", response_model=list[schema.Standards])
 async def standard_list(unit_id: int, db: AsyncSession = Depends(get_db)):
-    standards = await crud.get_standard_list(db=db, unit_id=unit_id)
+    standards = await crud.get_filter_list(db=db, 
+                                        model=Standards,
+                                        filter_field="unit_id",
+                                        id=unit_id)
     return standards

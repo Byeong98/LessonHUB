@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import insert, select
 
@@ -17,7 +17,7 @@ async def create_teach(db: AsyncSession,
     query = insert(Teaches).values(
         grade_id=grade_id,
         subject=response_json['과목'],
-        session=response_json['과목상세'],
+        section=response_json['과목상세'],
         unit_id=unit_id,
         title=response_json['제목'],
         objective=",".join(response_json['학습목표']),
@@ -30,12 +30,23 @@ async def create_teach(db: AsyncSession,
     await db.execute(query)
     await db.commit()
 
+# 교수안 목록 조회
+async def get_teach_list(db: AsyncSession, id: int):
+    query = (
+        select(Teaches)
+        .options(selectinload(Teaches.grade), selectinload(Teaches.unit)) 
+        .filter(Teaches.user_id == id)
+        .order_by(Teaches.id.desc())
+    )
+    result = await db.execute(query)
+    return result.scalars().all()
+
+
 # 단일 값 조회
-async def get_title(db: AsyncSession, model ,id: int):
+async def get_title(db: AsyncSession, model, id: int):
     query = select(model).filter(model.id == id)
     result = await db.execute(query)
     return result.scalars().first()
-
 
 
 # 학년 리스트 조회
@@ -51,24 +62,9 @@ async def get_subjects_list(db: AsyncSession):
     result = await db.execute(query)
     return result.scalars().all()
 
-# 과목상세 리스트 조회
-async def get_sission_list(db: AsyncSession, subject_id: int):
-    query = select(Sessions).filter(Sessions.subject_id ==
-                                    subject_id).order_by(Sessions.id)
+
+async def get_filter_list(db: AsyncSession, model, filter_field: str, id: int):
+    filter_column = getattr(model, filter_field)
+    query = select(model).filter(filter_column == id).order_by(model.id)
     result = await db.execute(query)
     return result.scalars().all()
-
-# 단원 리스트 조회
-async def get_unit_list(db: AsyncSession, session_id: int):
-    query = select(Units).filter(Units.session_id ==
-                                session_id).order_by(Units.id)
-    result = await db.execute(query)
-    return result.scalars().all()
-
-# 성취기준 리스트 조회
-async def get_standard_list(db: AsyncSession, unit_id: int):
-    query = select(Standards).filter(
-        Standards.unit_id == unit_id).order_by(Standards.id)
-    result = await db.execute(query)
-    return result.scalars().all()
-
