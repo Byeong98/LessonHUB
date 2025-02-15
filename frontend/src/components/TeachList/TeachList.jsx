@@ -60,7 +60,7 @@ const TeachList = () => {
   useEffect(() => {
     if (!accessToken) return;
 
-    api.get(`api/teach/`,
+    api.get(`api/teach/list`,
       {
         headers: {
           "Content-Type": "application/json",

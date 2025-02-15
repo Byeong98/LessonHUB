@@ -25,6 +25,19 @@ class TeachList(BaseModel):
     title: str
     date: str
 
+# 교수안 상세 조회
+class TeachDetail(BaseModel):
+    id: int
+    grade: str
+    subject: str
+    section: str
+    unit: str
+    title: str
+    objective: str
+    intro: str
+    deployment: str
+    finish: str
+    date: str
 
 #학년 조회
 class Grades(BaseModel):
