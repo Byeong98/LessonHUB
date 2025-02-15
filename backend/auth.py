@@ -13,7 +13,7 @@ from domain.users import crud
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/user/login")
 
 # 로그인 사용자 토큰 값 가져오기
-async def get_current_user(token: Annotated [str, Depends(oauth2_scheme)], db: AsyncSession = Depends(get_db)):
+async def get_current_user(token: str = Depends(oauth2_scheme), db: AsyncSession = Depends(get_db)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",

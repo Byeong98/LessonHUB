@@ -17,9 +17,9 @@ function SelectTitle({style = "small", title, options, onChange }) {
                     value={selectedValue} 
                     onChange={handleChange} >
                 <option value="">선택하세요</option>
-                {options.map((option, index) => (
-                    <option key={index} value={option.value}>
-                        {option.label}
+                {options && options.map((option) => (
+                    <option key={option.id} value={option.id}>
+                        {option.title}
                     </option>
                 ))}
             </select>

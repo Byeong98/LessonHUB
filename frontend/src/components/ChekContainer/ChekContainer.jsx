@@ -1,45 +1,61 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./ChekContainer.module.css";
 import Border from "../Border/Border";
 
-const CheckboxTitle = ({ options, onChange }) => {
-  const [selectedValues, setSelectedValues] = useState([]);
+const CheckboxTitle = ({ options, onChange, allowDuplicates, selectedValues, setSelectedValues }) => {
 
-  const handleCheckChange = (event, value) => {
-    const newSelectedValues = event.target.checked
-      ? [...selectedValues, value] 
-      : selectedValues.filter((val) => val !== value); 
+  const handleCheckChange = (event, id) => {
+    const isChecked = event.target.checked;
+    let updatedValues;
 
-    setSelectedValues(newSelectedValues);
-
-    if (onChange) {
-      onChange(newSelectedValues); // 부모 컴포넌트로 값 전달
+    if (allowDuplicates) {
+      updatedValues = isChecked
+        ? [...selectedValues, id] 
+        : selectedValues.filter((value) => value !== id); 
+    } else {
+      // 단일 선택일 경우 값 하나만 저장
+      updatedValues = isChecked ? id : null;
     }
-  };
 
+    setSelectedValues(updatedValues);
+    onChange(updatedValues);
+  };
   return (
     <div className={styles.container}>
-      {options.map((option, index) => (
-        <label key={index} className={styles.checkbox_label}>
-          <input
-            type="checkbox"
-            name="checkbox"
-            checked={selectedValues.includes(option.value)} 
-            onChange={(event) => handleCheckChange(event, option.value)} // 상태 업데이트 후 부모로 값 전달
-          />
-          <span>{option.label}</span>
-        </label>
-      ))}
+      {options &&
+        options.map((option, index) => (
+          <label key={index} className={styles.checkbox_label}>
+            <input
+              type="checkbox"
+              name="checkbox"
+              checked={allowDuplicates ? selectedValues.includes(option.id) : selectedValues === option.id}
+              onChange={(event) => handleCheckChange(event, option.id)}
+            />
+            <span>{option.title}</span>
+          </label>
+        ))}
     </div>
   );
 };
 
-const ChekContainer = ({ style = "checkbox", title, optionsList, onChange }) => {
+const ChekContainer = ({ style = "checkbox", title, optionsList, onChange, allowDuplicates = true, selectedIds }) => {
+  const [selectedValues, setSelectedValues] = useState(selectedIds || []);
+
+  // formData.standard_id가 변경되면 selectedValues도 업데이트
+  useEffect(() => {
+    setSelectedValues(selectedIds || []);
+  }, [selectedIds]);
+
   return (
     <div className={styles.checkbox_container}>
       <p>{title}</p>
       <Border style={style} bgColor="rgba(245,245,245,1)">
-        <CheckboxTitle options={optionsList} onChange={onChange} />
+        <CheckboxTitle 
+        options={optionsList} 
+        onChange={onChange} 
+        allowDuplicates={allowDuplicates}
+        selectedValues={selectedValues}
+        setSelectedValues={setSelectedValues} />
       </Border>
     </div>
   );
