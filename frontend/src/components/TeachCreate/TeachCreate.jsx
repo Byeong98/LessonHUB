@@ -15,7 +15,7 @@ const SelectContainer = ({ data, onChange }) => {
     <div className={styles.select_container} >
       <SelectTitle title="학년" options={data.grades} onChange={(value) => onChange("grade_id", value)} />
       <SelectTitle title="과목" options={data.subjects} onChange={(value) => onChange("subject_id", value)} />
-      <SelectTitle title="과목상세" options={data.sessions} onChange={(value) => onChange("session_id", value)} />
+      <SelectTitle title="과목상세" options={data.sections} onChange={(value) => onChange("section_id", value)} />
     </div>
   )
 }
@@ -67,14 +67,14 @@ const TeachCreate = () => {
   const [formData, setFormData] = useState({
     grade_id: "",
     subject_id: "",
-    session_id: "",
+    section_id: "",
     unit_id: "",
     standard_id: []
   });
   const [data, setData] = useState({
     grades: [],
     subjects: [],
-    sessions: [],
+    sections: [],
     units: [],
     standards: []
   });
@@ -108,7 +108,7 @@ const TeachCreate = () => {
 
     setData(prev => ({
       ...prev,
-      sessions: [],
+      sections: [],
       units: [],
       standards: []
     }));
@@ -116,14 +116,14 @@ const TeachCreate = () => {
     api.get(`api/teach/${Number(formData.subject_id)}/sections`)
       .then(response => setData(prev => ({
         ...prev,
-        sessions: response.data,
+        sections: response.data,
       })))
       .catch((error) => console.error("Error fetching data:", error));
   }, [formData.subject_id]);
 
   // 단원 가져오기
   useEffect(() => {
-    if (!formData.session_id) return;
+    if (!formData.section_id) return;
 
     setData(prev => ({
       ...prev,
@@ -131,13 +131,13 @@ const TeachCreate = () => {
       standards: []
     }));
 
-    api.get(`api/teach/${Number(formData.session_id)}/units`)
+    api.get(`api/teach/${Number(formData.section_id)}/units`)
       .then(response => setData(prev => ({
         ...prev,
         units: response.data,
       })))
       .catch((error) => console.error("Error Unuts:", error));
-  }, [formData.session_id]);
+  }, [formData.section_id]);
 
   // 성취 기준  가져오기
   useEffect(() => {
@@ -161,11 +161,10 @@ const TeachCreate = () => {
       .catch((error) => console.error("Error Unuts:", error));
   }, [formData.unit_id]);
 
-
-
+  console.log(data)
   return (
     <div className={styles.container}>
-      <Border style='TeachingForm' bgColor="white" >
+      <Border style='Teach_create' bgColor="white" >
         <div className={styles.content_container}>
           <h3>교수안 생성</h3>
           <SelectContainer data={data} onChange={handleSelectChange} />

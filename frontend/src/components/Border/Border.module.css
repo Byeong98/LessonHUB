@@ -6,9 +6,14 @@
 }
 
 /* 크기 조절 */
-.TeachingForm {
+.Teach_create {
     width: 600px;
     height: 700px;
+}
+
+.teach_list{
+    width: 200px;
+    height: 200px;
 }
 
 .login {

@@ -5,17 +5,28 @@ from typing import List
 class TeachCreate(BaseModel):
     grade_id: int
     subject_id: int
-    session_id: int
+    section_id: int
     unit_id: int 
     standard_id: List[int]
     
-    @field_validator('session_id', 'subject_id','grade_id', 'unit_id','standard_id')
+    @field_validator('section_id', 'subject_id','grade_id', 'unit_id','standard_id')
     def validate_not_zero(cls, v):
         if not v:
             raise ValueError('빈 값은 허용되지 않습니다.')
         return v
 
+# 교수안 목록 조회
+class TeachList(BaseModel):
+    id: int
+    grade: str
+    subject: str
+    section: str
+    unit: str
+    title: str
+    date: str
 
+
+#학년 조회
 class Grades(BaseModel):
     id: int
     title: str
@@ -26,7 +37,7 @@ class Subjects(BaseModel):
     title: str
 
 # 과목 상세 조회
-class Sessions(BaseModel):
+class Sections(BaseModel):
     id: int
     title: str
 

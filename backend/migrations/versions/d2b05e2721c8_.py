@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: f01961f77d9c
+Revision ID: d2b05e2721c8
 Revises: 
-Create Date: 2025-02-15 02:11:03.452081
+Create Date: 2025-02-16 01:08:32.183003
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'f01961f77d9c'
+revision: str = 'd2b05e2721c8'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -38,7 +38,7 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email')
     )
-    op.create_table('sessions',
+    op.create_table('sections',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('title', sa.String(), nullable=False),
     sa.Column('subject_id', sa.Integer(), nullable=False),
@@ -48,8 +48,8 @@ def upgrade() -> None:
     op.create_table('units',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('title', sa.String(), nullable=False),
-    sa.Column('session_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['session_id'], ['sessions.id'], ),
+    sa.Column('section_id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['section_id'], ['sections.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('standards',
@@ -63,7 +63,7 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('grade_id', sa.Integer(), nullable=False),
     sa.Column('subject', sa.String(), nullable=False),
-    sa.Column('session', sa.String(), nullable=False),
+    sa.Column('section', sa.String(), nullable=False),
     sa.Column('unit_id', sa.Integer(), nullable=False),
     sa.Column('title', sa.String(), nullable=False),
     sa.Column('objective', sa.Text(), nullable=False),
@@ -93,7 +93,7 @@ def downgrade() -> None:
     op.drop_table('teaches')
     op.drop_table('standards')
     op.drop_table('units')
-    op.drop_table('sessions')
+    op.drop_table('sections')
     op.drop_table('users')
     op.drop_table('subjects')
     op.drop_table('grades')
