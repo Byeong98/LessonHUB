@@ -89,7 +89,8 @@ async def teach_create(teach_create: schema.TeachCreate,
     )
     return response_json
 
-@router.get("/", response_model=list[schema.TeachList])
+# 교수안 리스트 조회
+@router.get("/list", response_model=list[schema.TeachList])
 async def teach_list(current_user: Annotated[Users, Depends(get_current_user)],
                     db: AsyncSession = Depends(get_db), 
                     ):
@@ -107,6 +108,28 @@ async def teach_list(current_user: Annotated[Users, Depends(get_current_user)],
         })
     return data
 
+# 교수안 상세 조회
+@router.get("{teach_id}", response_model=schema.TeachDetail)
+async def teach_detail(teach_id: int, 
+                        # current_user: Annotated[Users, Depends(get_current_user)], 
+                        db: AsyncSession = Depends(get_db)):
+    teach = await crud.get_teach_detail(db=db, id=teach_id)
+    if not teach:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="교수안을 찾을 수 없습니다.")
+    data = {
+        "id": teach.id,
+        "grade": teach.grade.title,
+        "subject": teach.subject,
+        "section": teach.section,
+        "unit": teach.unit.title,
+        "title": teach.title,
+        "objective": teach.objective,
+        "intro": teach.intro,
+        "deployment": teach.deployment,
+        "finish": teach.finish,
+        "date": teach.create_at.strftime("%Y-%m-%d")
+    }
+    return data
 
 #학년 조회
 @router.get("/grades", response_model=list[schema.Grades])

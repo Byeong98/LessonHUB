@@ -41,6 +41,11 @@ async def get_teach_list(db: AsyncSession, id: int):
     result = await db.execute(query)
     return result.scalars().all()
 
+# 교수안 조회 
+async def get_teach_detail(db: AsyncSession, id: int):
+    query = select(Teaches).options(selectinload(Teaches.grade), selectinload(Teaches.unit)).filter(Teaches.id == id)
+    result = await db.execute(query)
+    return result.scalar()
 
 # 단일 값 조회
 async def get_title(db: AsyncSession, model, id: int):
