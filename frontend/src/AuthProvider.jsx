@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
             setAccessToken(token);
             setUserEmail(email);
         };
-        console.log(email)
+        
     }, []);
 
     return (

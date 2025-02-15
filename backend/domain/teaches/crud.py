@@ -30,11 +30,20 @@ async def create_teach(db: AsyncSession,
     await db.execute(query)
     await db.commit()
 
-# 학년 조회
-async def get_grade(db: AsyncSession, grade_id: int):
-    query = select(Grades).filter(Grades.id == grade_id)
+# 단일 값 조회
+async def get_title(db: AsyncSession, model ,id: int):
+    query = select(model).filter(model.id == id)
     result = await db.execute(query)
     return result.scalars().first()
+
+
+
+# 학년 리스트 조회
+async def get_grades_list(db: AsyncSession):
+    query = select(Grades).order_by(Grades.id)
+    result = await db.execute(query)
+    return result.scalars().all()
+
 
 # 과목 리스트 조회
 async def get_subjects_list(db: AsyncSession):
@@ -42,7 +51,7 @@ async def get_subjects_list(db: AsyncSession):
     result = await db.execute(query)
     return result.scalars().all()
 
-# 과목 상세 리스트 조회
+# 과목상세 리스트 조회
 async def get_sission_list(db: AsyncSession, subject_id: int):
     query = select(Sessions).filter(Sessions.subject_id ==
                                     subject_id).order_by(Sessions.id)
@@ -55,11 +64,6 @@ async def get_unit_list(db: AsyncSession, session_id: int):
                                 session_id).order_by(Units.id)
     result = await db.execute(query)
     return result.scalars().all()
-#단원 조회 
-async def get_unit(db: AsyncSession, unit_id: int):
-    query = select(Units).filter(Units.id == unit_id)
-    result = await db.execute(query)
-    return result.scalars().first()
 
 # 성취기준 리스트 조회
 async def get_standard_list(db: AsyncSession, unit_id: int):
@@ -68,16 +72,3 @@ async def get_standard_list(db: AsyncSession, unit_id: int):
     result = await db.execute(query)
     return result.scalars().all()
 
-# 성취기준 조회
-async def get_standard(db: AsyncSession, standard_id: int):
-    query = select(Standards).filter(Standards.id == standard_id)
-    result = await db.execute(query)
-    return result.scalars().first()
-
-
-# 성취기준 해설 조회
-async def get_comentary(db: AsyncSession, standard_id: int):
-    query = select(Commentaries).filter(
-        Commentaries.standard_id == standard_id)
-    result = await db.execute(query)
-    return result.scalars().first()

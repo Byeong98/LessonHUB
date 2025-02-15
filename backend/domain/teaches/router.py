@@ -9,7 +9,7 @@ from domain.teaches import crud, schema
 
 from config import OPENAI_API_KEY
 from openai import OpenAI
-from models import Users
+from models import *
 from auth import get_current_user
 
 client = OpenAI(api_key=OPENAI_API_KEY)
@@ -28,17 +28,20 @@ async def teach_create(teach_create: schema.TeachCreate,
     standard_str = ""
     
     for standard_id in teach_create.standard_id:
-        standard = await crud.get_standard(db=db, standard_id=standard_id)
-        commentary = await crud.get_comentary(db=db, standard_id=standard_id)
+        standard = await crud.get_title(db=db, model=Standards, id=standard_id)
+        commentary = await crud.get_title(db=db, model=Commentaries,id=standard_id)
         if commentary:
             commentary_str += f"{commentary.title},"
         if standard:
             standard_str += f"{standard.title},"
 
-    # 학년 조회 or 단원 조회
-    grade = await crud.get_grade(db=db, grade_id=teach_create.grade_id)
-    unit = await crud.get_unit(db=db, unit_id=teach_create.unit_id)
-    if not grade or not unit:
+    # 학년, 과목, 과목상세, 단원 조회,
+    grade = await crud.get_title(db=db, model = Grades, id=teach_create.grade_id)
+    subject = await crud.get_title(db=db, model= Subjects, id=teach_create.subject_id)
+    session = await crud.get_title(db=db, model= Sessions ,id=teach_create.session_id)
+    unit = await crud.get_title(db=db, model= Units, id=teach_create.unit_id)
+
+    if not grade or not unit or not subject or not session:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="학년, 단원 조회 불가")
 
     # OpenAI API 요청보내기
@@ -57,8 +60,8 @@ async def teach_create(teach_create: schema.TeachCreate,
                 "role": "user",
                 "content": 
                 f"학년: {grade.title}\n"
-                f"과목: {teach_create.subject}\n"
-                f"과목상세: {teach_create.session}\n"
+                f"과목: {subject.title}\n"
+                f"과목상세: {session.title}\n"
                 f"단원: {unit.title}\n"
                 f"성취기준: {standard_str}\n"
                 f"성취기준해설: {commentary_str}\n"
@@ -85,6 +88,12 @@ async def teach_create(teach_create: schema.TeachCreate,
     )
     return response_json
 
+#학년 조회
+@router.get("/grades", response_model=list[schema.Grades])
+async def grades_list(db: AsyncSession = Depends(get_db)):
+    grades = await crud.get_grades_list(db=db)
+    return grades
+
 
 # 과목 조회
 @router.get("/subjects", response_model=list[schema.Subjects])
@@ -93,22 +102,22 @@ async def subjects_list(db: AsyncSession = Depends(get_db)):
     return subjects
 
 
-# 과목 상세 조회
+# 과목상세 조회
 @router.get("/{subject_id}/sections", response_model=list[schema.Sessions])
-async def section_list(_subject_id: int, db: AsyncSession = Depends(get_db)):
-    sections = await crud.get_sission_list(db=db, subject_id=_subject_id)
+async def section_list(subject_id: int, db: AsyncSession = Depends(get_db)):
+    sections = await crud.get_sission_list(db=db, subject_id=subject_id)
     return sections
 
 
 # 단원 조회
 @router.get("/{session_id}/units", response_model=list[schema.Units])
-async def unit_list(_session_id: int, db: AsyncSession = Depends(get_db)):
-    units = await crud.get_unit_list(db=db, session_id=_session_id)
+async def unit_list(session_id: int, db: AsyncSession = Depends(get_db)):
+    units = await crud.get_unit_list(db=db, session_id=session_id)
     return units
 
 
 # 성취기준 조회
 @router.get("/{unit_id}/standards", response_model=list[schema.Standards])
-async def standard_list(_unit_id: int, db: AsyncSession = Depends(get_db)):
-    standards = await crud.get_standard_list(db=db, unit_id=_unit_id)
+async def standard_list(unit_id: int, db: AsyncSession = Depends(get_db)):
+    standards = await crud.get_standard_list(db=db, unit_id=unit_id)
     return standards
