@@ -39,6 +39,16 @@ class TeachDetail(BaseModel):
     finish: str
     date: str
 
+class TeachUpdate(BaseModel):
+    teach_id: int
+    objective: str
+    intro: str
+    deployment: str
+    finish: str
+
+class TeachID(BaseModel):
+    id: int
+
 #학년 조회
 class Grades(BaseModel):
     id: int

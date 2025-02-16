@@ -44,7 +44,7 @@ const ButtonContainer = ({ formData, setLoading }) => {
     } catch (error) {
       alert('서버 연결 실패');
     }
-    setLoading(true);
+    setLoading(false);
   }
 
 return (
