@@ -1,14 +1,14 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from sqlalchemy import MetaData
+from config import SQLALCHEMY_ASYNC_DATABASE_URL
 
-SQLALCHEMY_ASYNC_DATABASE_URL = "sqlite+aiosqlite:///./backend.db"
 
 Base = declarative_base()
 
 meta = MetaData()
 async_engine = create_async_engine(SQLALCHEMY_ASYNC_DATABASE_URL)
-async_session = async_sessionmaker(async_engine, autoflush=False, autocommit=False)
+async_session = async_sessionmaker(async_engine, autoflush=False, autocommit=False, expire_on_commit=False)
 
 async def get_db():
 	# 처음 실행시
