@@ -22,7 +22,7 @@ router = APIRouter(
 
 
 # 교수안 생성
-@router.post("/create", status_code=status.HTTP_200_OK)
+@router.post("/create/", status_code=status.HTTP_200_OK)
 async def teach_create(teach_create: schema.TeachCreate,
                         current_user: Annotated[Users, Depends(get_current_user)],
                         db: AsyncSession = Depends(get_db)
@@ -93,7 +93,7 @@ async def teach_create(teach_create: schema.TeachCreate,
     return {"id": result}
 
 # 교수안 리스트 조회
-@router.get("/list", response_model=list[schema.TeachList])
+@router.get("/list/", response_model=list[schema.TeachList])
 async def teach_list(current_user: Annotated[Users, Depends(get_current_user)],
                     db: AsyncSession = Depends(get_db), 
                     ):
@@ -112,7 +112,7 @@ async def teach_list(current_user: Annotated[Users, Depends(get_current_user)],
     return data
 
 # 교수안 상세 조회
-@router.get("/get/{teach_id}", response_model=schema.TeachDetail)
+@router.get("/get/{teach_id}/", response_model=schema.TeachDetail)
 async def teach_detail(teach_id: int, 
                         # current_user: Annotated[Users, Depends(get_current_user)], 
                         db: AsyncSession = Depends(get_db)):
@@ -135,21 +135,21 @@ async def teach_detail(teach_id: int,
     return data
 
 #학년 조회
-@router.get("/grades", response_model=list[schema.Grades])
+@router.get("/grades/", response_model=list[schema.Grades])
 async def grades_list(db: AsyncSession = Depends(get_db)):
     grades = await crud.get_grades_list(db=db)
     return grades
 
 
 # 과목 조회
-@router.get("/subjects", response_model=list[schema.Subjects])
+@router.get("/subjects/", response_model=list[schema.Subjects])
 async def subjects_list(db: AsyncSession = Depends(get_db)):
     subjects = await crud.get_subjects_list(db=db)
     return subjects
 
 
 # 과목상세 조회
-@router.get("/{subject_id}/sections", response_model=list[schema.Sections])
+@router.get("/{subject_id}/sections/", response_model=list[schema.Sections])
 async def section_list(subject_id: int, db: AsyncSession = Depends(get_db)):
     sections = await crud.get_filter_list(db=db, 
                                         model= Sections,
@@ -159,7 +159,7 @@ async def section_list(subject_id: int, db: AsyncSession = Depends(get_db)):
 
 
 # 단원 조회
-@router.get("/{section_id}/units", response_model=list[schema.Units])
+@router.get("/{section_id}/units/", response_model=list[schema.Units])
 async def unit_list(section_id: int, db: AsyncSession = Depends(get_db)):
     units = await crud.get_filter_list(db=db, 
                                     model=Units,
@@ -169,7 +169,7 @@ async def unit_list(section_id: int, db: AsyncSession = Depends(get_db)):
 
 
 # 성취기준 조회
-@router.get("/{unit_id}/standards", response_model=list[schema.Standards])
+@router.get("/{unit_id}/standards/", response_model=list[schema.Standards])
 async def standard_list(unit_id: int, db: AsyncSession = Depends(get_db)):
     standards = await crud.get_filter_list(db=db, 
                                         model=Standards,

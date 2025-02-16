@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useContext } from 'react'
-import styles from './TeachCreate.module.css'
+import React, { useState, useEffect, useContext } from 'react';
+import styles from './TeachCreate.module.css';
 import { useNavigate } from 'react-router-dom';
 
-import Border from '../Border/Border'
-import Button from '../Button/Button'
-import SelectTitle from '../SelectTitle/SelectTitle'
-import ChekContainer from '../ChekContainer/ChekContainer'
+import Border from '../Border/Border';
+import Button from '../Button/Button';
+import SelectTitle from '../SelectTitle/SelectTitle';
+import ChekContainer from '../ChekContainer/ChekContainer';
+import LoadingOverlay from '../LoadingOverlay/LoadingOverlay';
 
 import { AuthContext } from '../../AuthProvider';
 import api from "../../api";
@@ -20,15 +21,6 @@ const SelectContainer = ({ data, onChange }) => {
   )
 }
 
-const LoadingOverlay = () => {
-  return (
-    <div className={styles.loading_overlay}>
-      <div className={styles.spinner}></div>
-      <p>교수안 제작 중 잠시만 기다려 주세요...</p>
-    </div>
-  );
-};
-
 const ButtonContainer = ({ formData, setLoading }) => {
   const navigate = useNavigate();
   const { accessToken } = useContext(AuthContext);
@@ -39,7 +31,7 @@ const ButtonContainer = ({ formData, setLoading }) => {
     setLoading(true);
     try {
       const response = await api.post(
-        "/api/teach/create",
+        "/api/teach/create/",
         formData,
         {
           headers: {
@@ -94,8 +86,8 @@ const TeachCreate = () => {
   // 학년 + 과목 데이터 가져오기
   useEffect(() => {
     Promise.all([
-      api.get("/api/teach/grades"),
-      api.get("/api/teach/subjects")
+      api.get("/api/teach/grades/"),
+      api.get("/api/teach/subjects/")
     ])
       .then(([gradesRes, subjectsRes]) => {
         setData({
@@ -125,7 +117,7 @@ const TeachCreate = () => {
       standards: []
     }));
 
-    api.get(`api/teach/${Number(formData.subject_id)}/sections`)
+    api.get(`api/teach/${Number(formData.subject_id)}/sections/`)
       .then(response => setData(prev => ({
         ...prev,
         sections: response.data,
@@ -143,7 +135,7 @@ const TeachCreate = () => {
       standards: []
     }));
 
-    api.get(`api/teach/${Number(formData.section_id)}/units`)
+    api.get(`api/teach/${Number(formData.section_id)}/units/`)
       .then(response => setData(prev => ({
         ...prev,
         units: response.data,
@@ -165,7 +157,7 @@ const TeachCreate = () => {
       standard_id: []
     }));
 
-    api.get(`api/teach/${Number(formData.unit_id)}/standards`)
+    api.get(`api/teach/${Number(formData.unit_id)}/standards/`)
       .then(response => setData(prev => ({
         ...prev,
         standards: response.data,
@@ -173,11 +165,11 @@ const TeachCreate = () => {
       .catch((error) => console.error("Error Unuts:", error));
   }, [formData.unit_id]);
 
-  console.log(data)
+
   return (
     <div className={styles.container}>
       <Border style='Teach_create' bgColor="white" >
-      {loading && <LoadingOverlay />}
+      <LoadingOverlay loading={loading}/>
         <div className={styles.content_container}>
           <h3>교수안 생성</h3>
           <SelectContainer data={data} onChange={handleSelectChange} />

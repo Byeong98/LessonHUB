@@ -40,11 +40,12 @@ const InputContainer = () => {
     if (!validate_data()) return;
     try {
       const response = await api.post(
-        "/api/user/login",
+        "/api/user/login/",
         formData,
         {
           headers: {
-            "Content-Type": "application/json",
+            // "Content-Type": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded"
           }
         }
       )

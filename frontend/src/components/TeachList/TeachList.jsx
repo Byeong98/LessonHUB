@@ -7,7 +7,7 @@ import api from '../../api';
 import { AuthContext } from '../../AuthProvider';
 
 const TeachForm = ({ item }) => {
-  console.log(item);
+
   return (
     <Link to={`/teach/detail/${item.id}`}>
       <Border style='teach_list' bgColor="rgba(245,245,245,1)">
@@ -60,7 +60,7 @@ const TeachList = () => {
   useEffect(() => {
     if (!accessToken) return;
 
-    api.get(`api/teach/list`,
+    api.get(`/api/teach/list/`,
       {
         headers: {
           "Content-Type": "application/json",
