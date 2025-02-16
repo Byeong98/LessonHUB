@@ -4,6 +4,7 @@ from config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 
 from fastapi import APIRouter, HTTPException
 from fastapi import Depends
+from typing import Annotated
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 from fastapi.security import OAuth2PasswordRequestForm
@@ -18,7 +19,7 @@ router = APIRouter(
 )
 
 # 회원가입
-@router.post("/create", status_code=status.HTTP_204_NO_CONTENT)
+@router.post("/create/", status_code=status.HTTP_204_NO_CONTENT)
 async def user_create(_user_create: schema.UserCreate, db: AsyncSession = Depends(get_db)):
     # 이메일 중복 확인
     user = await crud.get_existing_user(db=db, email=_user_create.email)
@@ -32,8 +33,8 @@ async def user_create(_user_create: schema.UserCreate, db: AsyncSession = Depend
     await crud.create_user(db=db, user_create=_user_create)
 
 # 로그인
-@router.post('/login',response_model=schema.Token)
-async def login_for_access_token(form_data: schema.UserLogin ,db: AsyncSession = Depends(get_db)):
+@router.post('/login/',response_model=schema.Token)
+async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()] ,db: AsyncSession = Depends(get_db)):
     if not form_data.username or not form_data.password:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail='Email 또는 Password를 입력해 주세요',
@@ -48,7 +49,7 @@ async def login_for_access_token(form_data: schema.UserLogin ,db: AsyncSession =
 
     data = {
         "sub": user.email,
-        "exp": datetime.utcnow() + timedelta(minutes=60)
+        "exp": datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     }
     access_token = jwt.encode(data, SECRET_KEY , algorithm=ALGORITHM) # type: ignore
     if not access_token:

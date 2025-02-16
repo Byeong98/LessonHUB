@@ -32,7 +32,7 @@ const DataContent = ({ title, data }) => {
   );
 };
 
-const ButtonContainer = ({ id }) => {
+const ButtonContainer = ({ id, data }) => {
   const navigate = useNavigate();
   const { accessToken } = useContext(AuthContext);
 return (
@@ -40,7 +40,7 @@ return (
     <Button
       width="40%"
       color='black'
-      onClick={() =>navigate(`/teach/updata/${id}`)}
+      onClick={() =>navigate(`/teach/update/${id}/`, {state: { data }})}
     >
       수정
     </Button>
@@ -64,7 +64,7 @@ const TeachDetail = () => {
   useEffect(() => {
     if (!id) return;
 
-    api.get(`api/teach/get/${id}`,
+    api.get(`api/teach/get/${id}/`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -109,7 +109,7 @@ const TeachDetail = () => {
           <DataContent title="전개" data={data.deployment} />
           <DataContent title="정리" data={data.finish} />
         </div>
-        <ButtonContainer id={id}/>
+        <ButtonContainer id={id} data={data}/>
       </Border>
     </div>
   )

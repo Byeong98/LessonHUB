@@ -30,5 +30,5 @@ class Token(BaseModel):
     email: str
 
 class UserLogin(BaseModel):
-    username: EmailStr
+    username: str
     password: str

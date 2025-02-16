@@ -42,7 +42,7 @@ const InputContainer = () => {
         if (!validate_data()) return;
         try {
             const response = await api.post(
-                "/api/user/create",
+                "/api/user/create/",
                 formData,
                 {
                     headers: {
