@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import style from './NavBar.module.css'
+import styles from './NavBar.module.css'
 import { Link, useNavigate } from "react-router-dom";
 
 
@@ -10,7 +10,7 @@ import { AuthContext } from '../../AuthProvider';
 
 const LoginContainer = () => {
     return (
-        <div className={style.lgin_container}>
+        <div className={styles.lgin_container}>
             <Link to="/login">
                 <Button width='100px' color='gray'>로그인</Button>
             </Link>
@@ -37,11 +37,11 @@ const LogoutContainer = ({ userEmail }) => {
     }
 
     return (
-        <div className={style.lgin_container}>
+        <div className={styles.lgin_container}>
             <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
                 alt="이미지"
-                className={style.prople} />
-            <p className={style.userEmail}>{userEmail}</p>
+                className={styles.prople} />
+            <p className={styles.userEmail}>{userEmail}</p>
             <Button
                 width='100px'
                 color='black'
@@ -57,9 +57,9 @@ const LogoutContainer = ({ userEmail }) => {
 const NavBar = () => {
     const { userEmail } = useContext(AuthContext);
     return (
-        <header className={style.header}>
-            <Link to="/" className={style.title_link}>
-                <h1 className={style.title} >로고</h1>
+        <header className={styles.header}>
+            <Link to="/" className={styles.title_link}>
+                <img src="/lessonhub-removebg.png" alt="lessonhub" className={styles.logo} />
             </Link>
             {userEmail ? <LogoutContainer userEmail={userEmail} /> : <LoginContainer />}
         </header>

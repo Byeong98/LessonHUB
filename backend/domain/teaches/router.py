@@ -114,7 +114,7 @@ async def teach_list(current_user: Annotated[Users, Depends(get_current_user)],
 # 교수안 상세 조회
 @router.get("/get/{teach_id}/", response_model=schema.TeachDetail)
 async def teach_detail(teach_id: int, 
-                        # current_user: Annotated[Users, Depends(get_current_user)], 
+                        current_user: Annotated[Users, Depends(get_current_user)], 
                         db: AsyncSession = Depends(get_db)):
     teach = await crud.get_teach_detail(db=db, id=teach_id)
     if not teach:
@@ -133,6 +133,63 @@ async def teach_detail(teach_id: int,
         "date": teach.create_at.strftime("%Y-%m-%d")
     }
     return data
+
+@router.put("/update/{teach_id}/", response_model=schema.TeachID)
+async def teach_update(teach_id: int, teach_update: schema.TeachUpdate,
+                        current_user: Annotated[Users, Depends(get_current_user)],
+                        db: AsyncSession = Depends(get_db)):
+    
+    teach = await crud.get_teach_detail(db=db, id=teach_id)
+    if not teach:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="교수안 수정을 할 수 없습니다.")
+    
+    # OpenAI API 요청보내기
+    completion = client.chat.completions.create(
+        model="gpt-4o-mini",
+        response_format={"type": "json_object"},
+        messages=[
+            {
+                "role": "system",
+                "content": "당신은 친절하고 정확한 교수안 작성 도우미입니다. "
+                "주어진 학년, 과목, 과목상세, 단원, 제목, 학습목표, 도입, 전개, 정리를 바탕으로 잘 구조화된 교수안을 작성해야 합니다."
+                "교수안은 학년, 과목, 과목상세, 단원, 제목, 학습목표, 도입, 전개, 정리, 참고자료로 구성됩니다."
+                "You are a helpful assistant designed to output JSON."
+            },
+            {
+                "role": "user",
+                "content": 
+                f"학년: {teach.grade.title}\n"
+                f"과목: {teach.subject.title}\n"
+                f"과목상세: {teach.section.title}\n"
+                f"단원: {teach.unit.title}\n"
+                f"학습목표: {teach_update.objective}\n"
+                f"도입: {teach_update.intro}\n"
+                f"전개: {teach_update.deployment}\n"
+                f"정리: {teach_update.finish}\n"
+                f"주어진 학습목표, 도입, 전개, 정리를 보고 교수안을 다시 작성해줘."
+                "{학년: string..., 과목: string..., 과목상세: string..., 단원: string... , 제목: string..., 학습목표: [string ...], 도입: [string ...], 전개: [string ...], 정리: [string ...]} "
+            }
+        ],
+    )
+
+    result = completion.choices[0].message.content
+    if not result:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="교수안 수정 실패")
+
+    response_json = json.loads(result)
+    print(response_json)
+
+    result = await crud.update_teach(
+        db=db,
+        response_json=response_json,
+        current_user_id=current_user.id,
+        teach_id=teach_id,
+        unit_id=teach.unit_id,
+        grade_id=teach.grade_id
+        )
+    return {"id": result}
+
 
 #학년 조회
 @router.get("/grades/", response_model=list[schema.Grades])

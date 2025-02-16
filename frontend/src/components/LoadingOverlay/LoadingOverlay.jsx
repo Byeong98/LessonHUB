@@ -6,7 +6,7 @@ const LoadingOverlay = ({ loading }) => {
     return (
         <div className={styles.loading_overlay}>
             <div className={styles.spinner}></div>
-            <p>교수안 제작 중 잠시만 기다려 주세요...</p>
+            <p>잠시만 기다려 주세요...</p>
         </div>
     );
 };

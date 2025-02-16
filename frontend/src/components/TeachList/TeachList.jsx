@@ -43,8 +43,8 @@ const AddTeachForm = () => {
   return (
     <Link to="/teach/create">
       <Border style='teach_list' bgColor="rgba(245,245,245,1)">
-        <div>
-          <p>+</p>
+        <div className={styles.add_container}>
+          <img src="/add.png" alt="lessonhub" className={styles.addbut} />
           <p>추가하기</p>
         </div>
       </Border>

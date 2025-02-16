@@ -1,9 +1,12 @@
-import React, { useEffect, useRef, useCallback, useState } from 'react';
+import React, { useEffect, useRef, useCallback, useState, useContext } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import styles from "./TeachUpdate.module.css";
 
 import Border from '../Border/Border';
 import Button from '../Button/Button';
+import api from '../../api';
+import LoadingOverlay from '../LoadingOverlay/LoadingOverlay';
+import { AuthContext } from '../../AuthProvider';
 
 const TopContainer = ({ data }) => {
   return (
@@ -72,14 +75,38 @@ const DataContent = ({ title, value, onChange }) => {
   );
 };
 
-const ButtonContainer = ({ id, data }) => {
+const ButtonContainer = ({ id, data, setLoading }) => {
   const navigate = useNavigate();
+  const { accessToken } = useContext(AuthContext);
+
+  const handlTeachCreate = async () => {
+    if (!accessToken) return;
+
+    setLoading(true);
+    try {
+      const response = await api.put(
+        `/api/teach/update/${id}/`,
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`,
+          }
+        }
+      )
+      navigate(`/teach/detail/${response.data.id}`);
+    } catch (error) {
+      alert('서버 연결 실패');
+    }
+    setLoading(false);
+  }
+
 return (
   <div className={styles.button_container}>
     <Button
       width="40%"
       color='black'
-      onClick={() =>navigate(`/teach/update/${id}/`, {state: { data }})}
+      onClick={handlTeachCreate}
     >
       수정 하기
     </Button>
@@ -99,10 +126,10 @@ const TeachUpdate = () => {
   const { id } = useParams(); // id값 가져오기
   const location = useLocation();
   const Data = location.state?.data || {}; // 초기 데이터
-
+  const [loading, setLoading] = useState(false); 
 
   const [formData, setFormData] = useState({
-    title: Data.title || "",
+    teach_id: id,
     objective: Data.objective || "",
     intro: Data.intro || "",
     deployment: Data.deployment || "",
@@ -116,10 +143,11 @@ const TeachUpdate = () => {
       [key]: value,
     }));
   };
-
+  console.log(Data)
   console.log(formData)
   return (
     <div className={styles.container}>
+      <LoadingOverlay loading={loading}/>
       <Border style="teach_detail_form" bgColor="white">
         <div className={styles.content_container}>
           <h3>교수안(수정)</h3>
@@ -131,7 +159,7 @@ const TeachUpdate = () => {
           <DataContent title="전개" value={formData.deployment} onChange={(val) => handleChange("deployment", val)} />
           <DataContent title="정리" value={formData.finish} onChange={(val) => handleChange("finish", val)} />
         </div>
-        <ButtonContainer />
+        <ButtonContainer id={id} setLoading={setLoading} data={formData}/>
       </Border>
     </div>
   );
