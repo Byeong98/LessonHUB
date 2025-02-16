@@ -1,17 +1,20 @@
-from fastapi import FastAPI, Depends
+import os
+from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
 
 from domain.users import router as users_router
 from domain.teaches import router as teach_router
+from config import HOST, PORT
 
 app = FastAPI(
     root_path="/dev/"
 )
 
-# CORS 설정 
+# CORS 설정
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # 모든 도메인에서 접근 허용
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -20,3 +23,6 @@ app.add_middleware(
 app.include_router(users_router.router)
 app.include_router(teach_router.router)
 
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host=HOST, port=PORT)
