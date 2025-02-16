@@ -20,8 +20,9 @@ class Teaches(Base):
     __tablename__ = "teaches"
 
     id = Column(Integer, primary_key=True)
+    grade_id = Column(Integer, ForeignKey("grades.id"), nullable=False)  # 학년
     subject = Column(String, nullable=False)  # 과목
-    session = Column(String, nullable=False)  # 과목 상세 (예: 국어, 수학 ...)
+    section = Column(String, nullable=False)  # 과목 상세 (예: 국어, 수학 ...)
     unit_id = Column(Integer, ForeignKey("units.id"), nullable=False)  # 단원
     title = Column(String, nullable=False)  # 제목
     objective = Column(Text, nullable=False)  # 학습목표
@@ -33,6 +34,16 @@ class Teaches(Base):
 
     user = relationship("Users", back_populates="teaches")
     unit = relationship("Units", back_populates="teach_list")
+    grade = relationship("Grades", back_populates="teach_list")
+
+
+class Grades(Base):
+    __tablename__ = "grades"
+
+    id = Column(Integer, primary_key=True)
+    title = Column(String, nullable=False)
+
+    teach_list = relationship("Teaches", back_populates="grade")
 
 
 # 과목 모델
@@ -42,18 +53,18 @@ class Subjects(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String, nullable=False)
 
-    sessions = relationship("Sessions", back_populates="subject")
+    sections = relationship("Sections", back_populates="subject")
 
 # 과목 상세 (예: 국어, 수학 ...)
-class Sessions(Base):
-    __tablename__ = "sessions"
+class Sections(Base):
+    __tablename__ = "sections"
 
     id = Column(Integer, primary_key=True)
     title = Column(String, nullable=False)
     subject_id = Column(Integer, ForeignKey("subjects.id"), nullable=False)
 
-    subject = relationship("Subjects", back_populates="sessions")
-    units = relationship("Units", back_populates="session")
+    subject = relationship("Subjects", back_populates="sections")
+    units = relationship("Units", back_populates="section")
 
 
 # 단원 모델
@@ -62,9 +73,9 @@ class Units(Base):
 
     id = Column(Integer, primary_key=True)
     title = Column(String, nullable=False)
-    session_id = Column(Integer, ForeignKey("sessions.id"), nullable=False)
+    section_id = Column(Integer, ForeignKey("sections.id"), nullable=False)
 
-    session = relationship("Sessions", back_populates="units")
+    section = relationship("Sections", back_populates="units")
     standards = relationship("Standards", back_populates="unit")
     teach_list = relationship("Teaches", back_populates="unit")
 

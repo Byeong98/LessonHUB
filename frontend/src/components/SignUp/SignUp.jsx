@@ -6,6 +6,7 @@ import Border from '../Border/Border'
 import Button from '../Button/Button'
 import InputTitle from '../InputTitle/InputTitle'
 import axios from "axios";
+import api from '../../api';
 
 const InputContainer = () => {
     const navigate = useNavigate();
@@ -40,8 +41,8 @@ const InputContainer = () => {
     const handlSignUP = async () => {
         if (!validate_data()) return;
         try {
-            const response = await axios.post(
-                "http://127.0.0.1:8000/api/user/create",
+            const response = await api.post(
+                "/api/user/create/",
                 formData,
                 {
                     headers: {

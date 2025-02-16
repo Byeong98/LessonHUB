@@ -7,6 +7,7 @@ import Border from '../Border/Border'
 import Button from '../Button/Button'
 import InputTitle from '../InputTitle/InputTitle'
 import { AuthContext } from '../../AuthProvider'
+import api from '../../api';
 
 
 const InputContainer = () => {
@@ -38,11 +39,12 @@ const InputContainer = () => {
   const handleLogin = async () => {
     if (!validate_data()) return;
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/user/login",
+      const response = await api.post(
+        "/api/user/login/",
         formData,
         {
           headers: {
+            // "Content-Type": "application/json",
             "Content-Type": "application/x-www-form-urlencoded"
           }
         }
@@ -53,7 +55,11 @@ const InputContainer = () => {
       });
       setAccessToken(response.data.access_token);
       setUserEmail(response.data.email);
-      navigate("/")
+      
+      navigate("/");
+      setTimeout(() => {
+        window.location.reload(); // 강제 새로고침
+    }, 100);
     } catch (error) {
       alert(error.response.data.detail)
     }

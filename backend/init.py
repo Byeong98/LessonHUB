@@ -14,8 +14,6 @@ with open('teach_data/commentary_data.json', 'r', encoding='utf-8') as f:
 
 
 db = async_session()
-# 과목별 단원 + 성취기준 저장
-
 
 async def Validation_data(model, data):
     query = select(model).filter(model.title == data)
@@ -23,14 +21,9 @@ async def Validation_data(model, data):
     return result.scalar()
 
 
-async def add_data(model, data,):
-    query = insert(model).values(title=data).returning(model.id)
-    result = await db.execute(query)
-    return result.scalar()
-
-
+# 과목별 단원 + 성취기준 저장
 async def csreate_data(data):
-    for subject, sessions in data.items():
+    for subject, sections in data.items():
         vaildate = await Validation_data(Subjects, subject)
         if vaildate:
             print(f'{subject} 데이터 존제')
@@ -40,16 +33,16 @@ async def csreate_data(data):
         await db.commit()
         subject_id = result.scalar()
 
-        for session, units in sessions.items():
-            query = insert(Sessions).values(
-                title=session, subject_id=subject_id).returning(Sessions.id)
+        for section, units in sections.items():
+            query = insert(Sections).values(
+                title=section, subject_id=subject_id).returning(Sections.id)
             result = await db.execute(query)
             await db.commit()
-            session_id = result.scalar()
+            section_id = result.scalar()
 
             for unit, standards in units.items():
                 query = insert(Units).values(
-                    title=unit, session_id=session_id).returning(Units.id)
+                    title=unit, section_id=section_id).returning(Units.id)
                 result = await db.execute(query)
                 await db.commit()
                 unit_id = result.scalar()
@@ -63,7 +56,6 @@ async def csreate_data(data):
 
 
 async def create_commentary(commentary_data):
-
     for commentary in commentary_data["commentary_data"]:
         match = re.search(r"\[(.*?)\]", commentary)
         if match:
@@ -78,7 +70,20 @@ async def create_commentary(commentary_data):
                 await db.execute(query)
                 await db.commit()
     await db.close()
+    
+
+# 학년 데이터
+grades = ["고등학교 1학년", "고등학교 2학년", "고등학교 3학년"]
+
+# 학년 데이터 저장
+async def create_grades(grades):
+    for grade in grades:
+        query = insert(Grades).values(title=grade)
+        await db.execute(query)
+        await db.commit()
+    await db.close()
 
 
-# asyncio.run(csreate_data(data))
+asyncio.run(csreate_data(data))
 asyncio.run(create_commentary(commentary_data))
+asyncio.run(create_grades(grades))
