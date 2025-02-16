@@ -20,11 +20,23 @@ const SelectContainer = ({ data, onChange }) => {
   )
 }
 
-const ButtonContainer = ({ formData }) => {
+const LoadingOverlay = () => {
+  return (
+    <div className={styles.loading_overlay}>
+      <div className={styles.spinner}></div>
+      <p>교수안 제작 중 잠시만 기다려 주세요...</p>
+    </div>
+  );
+};
+
+const ButtonContainer = ({ formData, setLoading }) => {
   const navigate = useNavigate();
   const { accessToken } = useContext(AuthContext);
 
   const handlTeachCreate = async () => {
+    if (!accessToken) return;
+
+    setLoading(true);
     try {
       const response = await api.post(
         "/api/teach/create",
@@ -36,11 +48,11 @@ const ButtonContainer = ({ formData }) => {
           }
         }
       )
-      alert('교수안 제작 완료');
-      navigate('/');
+      navigate(`/teach/detail/${response.data.id}`);
     } catch (error) {
       alert('서버 연결 실패');
     }
+    setLoading(true);
   }
 
 return (
@@ -63,7 +75,7 @@ return (
 }
 
 const TeachCreate = () => {
-  const [checkedValues, setCheckedValues] = useState([]);
+  const [loading, setLoading] = useState(false); 
   const [formData, setFormData] = useState({
     grade_id: "",
     subject_id: "",
@@ -165,6 +177,7 @@ const TeachCreate = () => {
   return (
     <div className={styles.container}>
       <Border style='Teach_create' bgColor="white" >
+      {loading && <LoadingOverlay />}
         <div className={styles.content_container}>
           <h3>교수안 생성</h3>
           <SelectContainer data={data} onChange={handleSelectChange} />
@@ -180,7 +193,7 @@ const TeachCreate = () => {
             onChange={(value) => handleSelectChange("standard_id", value)}
             selectedIds={formData.standard_id}
           />
-          <ButtonContainer formData={formData} />
+          <ButtonContainer formData={formData} setLoading={setLoading}/>
         </div>
       </Border>
     </div>

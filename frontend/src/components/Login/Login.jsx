@@ -44,7 +44,7 @@ const InputContainer = () => {
         formData,
         {
           headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
+            "Content-Type": "application/json",
           }
         }
       )
@@ -54,7 +54,11 @@ const InputContainer = () => {
       });
       setAccessToken(response.data.access_token);
       setUserEmail(response.data.email);
-      navigate("/")
+      
+      navigate("/");
+      setTimeout(() => {
+        window.location.reload(); // 강제 새로고침
+    }, 100);
     } catch (error) {
       alert(error.response.data.detail)
     }

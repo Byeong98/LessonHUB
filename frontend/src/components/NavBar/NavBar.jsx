@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import style from './NavBar.module.css'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 
 import Button from '../Button/Button'
 import { AuthContext } from '../../AuthProvider';
@@ -22,12 +23,17 @@ const LoginContainer = () => {
 
 const LogoutContainer = ({ userEmail }) => {
     const { setAccessToken, setUserEmail } = useContext(AuthContext);
+    const navigate = useNavigate();
     const handelLogout = () => {
         localStorage.removeItem('access_token');
         localStorage.removeItem('token_type');
         localStorage.removeItem('email');
         setAccessToken(null);
         setUserEmail(null);
+        navigate("/");
+        setTimeout(() => {
+            window.location.reload(); // 강제 새로고침
+        }, 100);
     }
 
     return (
