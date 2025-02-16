@@ -6,7 +6,17 @@
 }
 
 /* 크기 조절 */
-.TeachingForm {
+.Teach_create {
+    width: 600px;
+    height: 700px;
+}
+
+.teach_detail_form {
+    width: 600px;
+    /* height: 700px; */
+}
+
+.teach_list{
     width: 200px;
     height: 200px;
 }
@@ -19,4 +29,21 @@
 .signup {
     width: 300px;
     height: 400px;
+}
+
+.checkbox {
+    width: 100%;
+    height: 100px;
+    padding: 10px 0 0 0;
+}
+
+.checkbox_large {
+    width: 100%;
+    height: 230px;
+    padding: 10px 0 0 0;
+}
+
+.teach_detail {
+    width: 100%;
+    box-sizing: border-box;
 }

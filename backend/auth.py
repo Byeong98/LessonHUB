@@ -9,11 +9,23 @@ from config import SECRET_KEY, ALGORITHM
 from jose import jwt, JWTError
 
 from domain.users import crud
+from fastapi import Request
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/user/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/apip/user/login/")
+
+async def get_token_from_header(request: Request):
+    authorization: str = request.headers.get("Authorization")
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    token = authorization.split(" ")[1]  # 'Bearer '를 제거하고 토큰만 가져오기
+    return token
 
 # 로그인 사용자 토큰 값 가져오기
-async def get_current_user(token: Annotated [str, Depends(oauth2_scheme)], db: AsyncSession = Depends(get_db)):
+async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: AsyncSession = Depends(get_db)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",

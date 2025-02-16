@@ -28,3 +28,7 @@ class Token(BaseModel):
     access_token: str
     token_type: str
     email: str
+
+class UserLogin(BaseModel):
+    username: str
+    password: str
