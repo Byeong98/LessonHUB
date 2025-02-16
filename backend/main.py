@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = FastAPI(
-    root_path="/dev/"
+
 )
 
 # CORS 설정
