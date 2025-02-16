@@ -7,6 +7,10 @@ from domain.users import router as users_router
 from domain.teaches import router as teach_router
 from config import HOST, PORT
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 app = FastAPI(
     root_path="/dev/"
 )
