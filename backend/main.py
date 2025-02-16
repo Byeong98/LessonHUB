@@ -5,7 +5,7 @@ from domain.users import router as users_router
 from domain.teaches import router as teach_router
 
 app = FastAPI(
-    # root_path="/dev/"
+    root_path="/dev/"
 )
 
 # CORS 설정 

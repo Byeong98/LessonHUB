@@ -33,7 +33,7 @@ async def user_create(_user_create: schema.UserCreate, db: AsyncSession = Depend
 
 # 로그인
 @router.post('/login',response_model=schema.Token)
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(),db: AsyncSession = Depends(get_db)):
+async def login_for_access_token(form_data: schema.UserLogin ,db: AsyncSession = Depends(get_db)):
     if not form_data.username or not form_data.password:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail='Email 또는 Password를 입력해 주세요',
@@ -48,12 +48,9 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 
     data = {
         "sub": user.email,
-        "exp": datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        "exp": datetime.utcnow() + timedelta(minutes=60)
     }
     access_token = jwt.encode(data, SECRET_KEY , algorithm=ALGORITHM) # type: ignore
-
-    return {
-        "access_token": access_token,
-        "token_type": "bearer",
-        "email": user.email
-    }
+    if not access_token:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Token encoding error")
+    return {"access_token" : access_token, "token_type" : "bearer", "email": user.email}

@@ -26,9 +26,11 @@ async def create_teach(db: AsyncSession,
         finish=",".join(response_json['정리']),
         create_at=datetime.now(),
         user_id=current_user_id,
-    )
-    await db.execute(query)
+    ).returning(Teaches.id)
+    result = await db.execute(query)
     await db.commit()
+
+    return result.scalar()
 
 # 교수안 목록 조회
 async def get_teach_list(db: AsyncSession, id: int):

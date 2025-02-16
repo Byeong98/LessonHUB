@@ -18,6 +18,9 @@ client = OpenAI(api_key=OPENAI_API_KEY)
 router = APIRouter(
     prefix="/api/teach"
 )
+
+
+
 # 교수안 생성
 @router.post("/create", status_code=status.HTTP_200_OK)
 async def teach_create(teach_create: schema.TeachCreate,
@@ -80,14 +83,14 @@ async def teach_create(teach_create: schema.TeachCreate,
     response_json = json.loads(result)
     
     # 교수안 저장
-    await crud.create_teach(
+    result = await crud.create_teach(
         db=db,
         response_json=response_json,
-        current_user_id=1,
+        current_user_id=current_user.id,
         unit_id=unit.id,
         grade_id=grade.id
     )
-    return response_json
+    return {"id": result}
 
 # 교수안 리스트 조회
 @router.get("/list", response_model=list[schema.TeachList])
@@ -109,7 +112,7 @@ async def teach_list(current_user: Annotated[Users, Depends(get_current_user)],
     return data
 
 # 교수안 상세 조회
-@router.get("{teach_id}", response_model=schema.TeachDetail)
+@router.get("/get/{teach_id}", response_model=schema.TeachDetail)
 async def teach_detail(teach_id: int, 
                         # current_user: Annotated[Users, Depends(get_current_user)], 
                         db: AsyncSession = Depends(get_db)):
