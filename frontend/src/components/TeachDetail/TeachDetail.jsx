@@ -34,7 +34,7 @@ const DataContent = ({ title, data }) => {
 
 const ButtonContainer = ({ id, data }) => {
   const navigate = useNavigate();
-  const { accessToken } = useContext(AuthContext);
+  // const { accessToken } = useContext(AuthContext);
 return (
   <div className={styles.button_container}>
     <Button
@@ -59,7 +59,6 @@ const TeachDetail = () => {
   const { id } = useParams(); // id값 가져오기
   const { accessToken } = useContext(AuthContext);
   const [data, setData] = useState([]);
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (!id) return;
@@ -75,7 +74,6 @@ const TeachDetail = () => {
       .then(response => setData(response.data))
       .catch((error) => console.error("Error fetching data:", error));
   }, [id]);
-
 
   return (
     <div className={styles.container}>
