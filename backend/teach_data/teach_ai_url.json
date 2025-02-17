@@ -1,14 +1,74 @@
 {
-    "과학": [
+    [
         {
             "사이트 이름": "디지털 과학실",
             "설명": "디지털 탐구 도구와 코딩, 빅데이터 기반의 과학·SW·AI 융합 교육 콘텐츠",
-            "url": ""
+            "url": "https://mh.tsherpa.co.kr/digital-science/index.html"
         },
         {
-            "사이트 이름": "디지털 과학실",
-            "설명": "디지털 탐구 도구와 코딩, 빅데이터 기반의 과학·SW·AI 융합 교육 콘텐츠",
-            "url": ""
-        }
+            "사이트 이름": "EZ-ON",
+            "설명": "지능형 과학실에 최적화되어 자신만의 실험 도구 제작이 가능한 플랫폼",
+            "url": "https://ezon.ai/"
+        },
+        {
+            "사이트 이름": "AR/VR특별관",
+            "설명": "AR/VR을 이용한 다양하고 깊이 있는 실감형 콘텐츠 ",
+            "url": "https://e.tsherpa.co.kr/research/arvr_sub.aspx?category=01"
+        },
+        {
+            "사이트 이름": "스텔라리움 ",
+            "설명": "밤하늘 별자리 및 천체 관측 플랫폼",
+            "url": "https://stellarium.org/ko/"
+        },
+        {
+            "사이트 이름": "구글 어스",
+            "설명": "위성 이미지, 지도, 지형 및 3D 정보 등을 제공하는 위성 영상 지도 플랫폼",
+            "url": "https://earth.google.com/web/@0,-0.67290015,0a,22251752.77375655d,35y,0h,0t,0r/data=CgRCAggBOgMKATBCAggBSg0I____________ARAA"
+        },
+        {
+            "사이트 이름": "ZygoteBody",
+            "설명": "조작 가능한 3D 해부학적 인체 모델을 제공하는 플랫폼",
+            "url": "https://www.zygotebody.com/"
+        },
+        {
+            "사이트 이름": "닐펀",
+            "설명": "우주의 크기를 비교하여 볼 수 있는 사이트",
+            "url": "https://neal.fun/size-of-space/"
+        },
+        {
+            "사이트 이름": "에어파노",
+            "설명": "세계 곳곳의 특이한 지형들을 360도 사진과 동영상으로 제공하는 플랫폼",
+            "url": "https://www.airpano.com/"
+        },
+        {
+            "사이트 이름": "그래프 마법사",
+            "설명": "T셀파 그래프 그리기 마법사 ",
+            "url": "https://m.tsherpa.co.kr/total/graph/index.html"
+        },
+        {
+            "사이트 이름": "통그라미 ",
+            "설명": "통계청에서 개발한 교육용 통계소프트웨어",
+            "url": "https://tong.kostat.go.kr/tongramy_web/main.do?menuSn=163"
+        },
+        {
+            "사이트 이름": "지오지브라",
+            "설명": "교육용 수학 소프트웨어",
+            "url": "https://www.geogebra.org/"
+        },
+        {
+            "사이트 이름": "서울수학학습 메타버스",
+            "설명": "서울 명소를 중심으로 구축한 수학 학습 플랫폼",
+            "url": "https://math.sen.go.kr/main/main.php"
+        },
+        {
+            "사이트 이름": "매쓰온클라우드",
+            "설명": "방정식을 입력하면 그래프를 그려주는 사이트",
+            "url": "https://www.mathoncloud.com/"
+        },
+        {
+            "사이트 이름": "썸네일알지오매스 2D",
+            "설명": "한국형 지오지브라, 2D, 3D 수학 도구를통해 직관적인 수학 실습 진행",
+            "url": "https://www.algeomath.kr/algeo/algeomath/app/make.do"
+        },
     ]
 }
