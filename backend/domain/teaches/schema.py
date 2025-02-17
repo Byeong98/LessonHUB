@@ -37,6 +37,7 @@ class TeachDetail(BaseModel):
     intro: str
     deployment: str
     finish: str
+    url: list
     date: str
 
 class TeachUpdate(BaseModel):

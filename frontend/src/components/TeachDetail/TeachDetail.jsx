@@ -31,27 +31,45 @@ const DataContent = ({ title, data }) => {
     </div>
   );
 };
+const DataUrl = ({ title, data }) => {
+
+  console.log(data);
+
+  return (
+    <div className={styles.content}>
+      <h4>{title}</h4>
+      <Border style="teach_detail" bgColor="rgba(245,245,245,1)">
+        {data && data.map((item, index) => (
+          <p key={index}>
+            <a href={item.url}>{item.name}</a>
+          </p>
+        ))}
+        
+      </Border>
+    </div>
+  );
+};
 
 const ButtonContainer = ({ id, data }) => {
   const navigate = useNavigate();
   // const { accessToken } = useContext(AuthContext);
-return (
-  <div className={styles.button_container}>
-    <Button
-      width="40%"
-      color='black'
-      onClick={() =>navigate(`/teach/update/${id}/`, {state: { data }})}
-    >
-      수정
-    </Button>
-    <Button
-      width="40%"
-      onClick={() => navigate("/")}
-    >
-      나가기
-    </Button>
-  </div>
-)
+  return (
+    <div className={styles.button_container}>
+      <Button
+        width="40%"
+        color='black'
+        onClick={() => navigate(`/teach/update/${id}/`, { state: { data } })}
+      >
+        수정
+      </Button>
+      <Button
+        width="40%"
+        onClick={() => navigate("/")}
+      >
+        나가기
+      </Button>
+    </div>
+  )
 }
 
 
@@ -106,8 +124,9 @@ const TeachDetail = () => {
           <DataContent title="도입" data={data.intro} />
           <DataContent title="전개" data={data.deployment} />
           <DataContent title="정리" data={data.finish} />
+          <DataUrl title="참고자료" data={data.url} />
         </div>
-        <ButtonContainer id={id} data={data}/>
+        <ButtonContainer id={id} data={data} />
       </Border>
     </div>
   )
