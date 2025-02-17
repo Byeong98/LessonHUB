@@ -11,9 +11,11 @@ with open('teach_data/teach_data.json', 'r', encoding='utf-8') as f:
     data = json.load(f)
 with open('teach_data/commentary_data.json', 'r', encoding='utf-8') as f:
     commentary_data = json.load(f)
-
+with open("teach_data/ai_url.json", 'r', encoding='utf-8') as f:
+    ai_url = json.load(f)
 
 db = async_session()
+
 
 async def Validation_data(model, data):
     query = select(model).filter(model.title == data)
@@ -72,12 +74,14 @@ async def create_commentary(commentary_data):
                 await db.commit()
     await db.close()
     print("해설 데이터")
-    
+
 
 # 학년 데이터
 grades = ["고등학교 1학년", "고등학교 2학년", "고등학교 3학년"]
 
 # 학년 데이터 저장
+
+
 async def create_grades(grades):
     for grade in grades:
         query = insert(Grades).values(title=grade)
@@ -87,6 +91,20 @@ async def create_grades(grades):
     print("학년 데이터")
 
 
+async def create_ai_url(ai_url):
+    for ai_url in ai_url["ai_url"]:
+        query = insert(Aiurls).values(
+            name=ai_url["이름"],
+            url=ai_url["url"],
+            content=ai_url["설명"]
+        )
+        await db.execute(query)
+        await db.commit()
+    await db.close()
+    print("ai 데이터")
+
+
 asyncio.run(csreate_data(data))
 asyncio.run(create_commentary(commentary_data))
 asyncio.run(create_grades(grades))
+asyncio.run(create_ai_url(ai_url))
