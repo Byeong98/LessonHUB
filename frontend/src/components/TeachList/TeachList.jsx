@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import styles from './TeachList.module.css'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import Border from '../Border/Border'
 import api from '../../api';
@@ -39,18 +39,28 @@ const TeachForm = ({ item }) => {
   )
 }
 
-const AddTeachForm = () => {
+const AddTeachForm = ({token}) => {
+  const navigate = useNavigate();
+
+  const handleClick = (e) => {
+
+    if (!token) {
+      e.preventDefault(); // 기본 링크 이동 방지
+      navigate("/login"); // 로그인 페이지로 이동
+    }
+  };
+
   return (
-    <Link to="/teach/create">
-      <Border style='teach_list' bgColor="rgba(245,245,245,1)">
+    <Link to="/teach/create" onClick={handleClick}>
+      <Border style="teach_list" bgColor="rgba(245,245,245,1)">
         <div className={styles.add_container}>
           <img src="/add.png" alt="lessonhub" className={styles.addbut} />
           <p>추가하기</p>
         </div>
       </Border>
     </Link>
-  )
-}
+  );
+};
 
 
 const TeachList = () => {
@@ -77,11 +87,16 @@ const TeachList = () => {
       <div className={styles.content}>
         <h1>교수안</h1>
         <div className={styles.formWrapper}>
-          <AddTeachForm />
-          {data ? (
+          <AddTeachForm token={accessToken}/>
+          {data.length !== 0  ? (
             data.map(item => <TeachForm key={item.id} item={item} />)
           ) : (
-            <TeachForm item={{ id: "create", title: "교수안을 추가해 주세요", grade: "", subject: "", unit: "", standard: "" }} />
+            <Border style='teach_list' bgColor="rgba(245,245,245,1)">
+            <div className={styles.add_container}>
+              <p></p>
+              <p>교수안을 추가하세요.</p>
+            </div>
+          </Border>
           )}
         </div>
       </div>

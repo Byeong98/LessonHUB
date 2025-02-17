@@ -70,6 +70,7 @@ async def update_teach(db: AsyncSession,
                 intro=",".join(response_json['도입']),
                 deployment=",".join(response_json['전개']),
                 finish=",".join(response_json['정리']),
+                ai_url=str(response_json['참고자료']),
                 create_at=datetime.now(),
                 user_id=current_user_id,
             ).returning(Teaches.id))
