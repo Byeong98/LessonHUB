@@ -26,3 +26,5 @@ docker-compose.override.yml
 data_FTuning.json
 # teach_data.json
 # commentary_data.json
+
+package-lock.json
