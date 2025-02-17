@@ -1,20 +1,20 @@
 FROM node:alpine AS build
 WORKDIR /app
 
-COPY ./package.json .
+COPY ./frontend/package.json .
 
-RUN npm install 
+RUN npm install --force
 
-COPY . .
+COPY ./frontend .
 
 ENV WATCHPACK_POLLING=true
 
 COPY .env.production .env
 
-CMD [ "npm", "start" ]
+RUN npm run build
 
 
-# FROM nginx:stable-alpine AS production
-# COPY --from=build /app/build /usr/share/nginx/html
-# EXPOSE 3000
-# CMD ["nginx", "-g", "daemon off;"]
+FROM nginx:stable-alpine AS production
+COPY --from=build /app/build /usr/share/nginx/html
+EXPOSE 3000
+CMD ["nginx", "-g", "daemon off;"]
