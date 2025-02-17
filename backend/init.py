@@ -53,6 +53,7 @@ async def csreate_data(data):
                     await db.execute(query)
                     await db.commit()
     await db.close()
+    print("교수안 데이터")
 
 
 async def create_commentary(commentary_data):
@@ -70,6 +71,7 @@ async def create_commentary(commentary_data):
                 await db.execute(query)
                 await db.commit()
     await db.close()
+    print("해설 데이터")
     
 
 # 학년 데이터
@@ -82,6 +84,7 @@ async def create_grades(grades):
         await db.execute(query)
         await db.commit()
     await db.close()
+    print("학년 데이터")
 
 
 asyncio.run(csreate_data(data))
