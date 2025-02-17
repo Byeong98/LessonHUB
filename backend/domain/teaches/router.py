@@ -61,7 +61,7 @@ async def teach_create(teach_create: schema.TeachCreate,
                 "content": "당신은 친절하고 정확한 교수안 작성 도우미입니다. "
                 "주어진 성취기준과 성취기준 해설을 바탕으로 잘 구조화된 교수안을 작성해야 합니다. "
                 "교수안은 학년, 과목, 과목상세, 단원, 제목, 학습목표, 도입, 전개, 정리, 참고자료로 구성됩니다."
-                "참고 자료는 교수안의 내요을 토대로 수업어 작합한 ai리스트에서 선택해서 반환합니다.."
+                "참고 자료는 교수안의 내요을 토대로 수업어 작합한 ai리스트에서 선택해서 반환합니다."
                 "You are a helpful assistant designed to output JSON."
             },
             {
@@ -152,6 +152,9 @@ async def teach_update(teach_id: int, teach_update: schema.TeachUpdate,
     if not teach:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="교수안 수정을 할 수 없습니다.")
     
+    url_list = await crud.get_ai_url_list(db=db)
+    ai_url_list = [ f"name: {i.name}, 내용:{i.content}, url:{i.url}" for i in url_list ]
+
     # OpenAI API 요청보내기
     completion = client.chat.completions.create(
         model="gpt-4o-mini",
@@ -162,6 +165,7 @@ async def teach_update(teach_id: int, teach_update: schema.TeachUpdate,
                 "content": "당신은 친절하고 정확한 교수안 작성 도우미입니다. "
                 "주어진 학년, 과목, 과목상세, 단원, 제목, 학습목표, 도입, 전개, 정리를 바탕으로 잘 구조화된 교수안을 작성해야 합니다."
                 "교수안은 학년, 과목, 과목상세, 단원, 제목, 학습목표, 도입, 전개, 정리, 참고자료로 구성됩니다."
+                "참고 자료는 교수안의 내요을 토대로 수업어 작합한 ai리스트에서 선택해서 반환합니다.."
                 "You are a helpful assistant designed to output JSON."
             },
             {
@@ -175,8 +179,9 @@ async def teach_update(teach_id: int, teach_update: schema.TeachUpdate,
                 f"도입: {teach_update.intro}\n"
                 f"전개: {teach_update.deployment}\n"
                 f"정리: {teach_update.finish}\n"
+                f"ai리스트: {ai_url_list}\n"
                 f"주어진 학습목표, 도입, 전개, 정리를 보고 교수안을 다시 작성해줘."
-                "{학년: string..., 과목: string..., 과목상세: string..., 단원: string... , 제목: string..., 학습목표: [string ...], 도입: [string ...], 전개: [string ...], 정리: [string ...]} "
+                "{학년: str..., 과목: str..., 과목상세: str..., 단원: string... , 제목: str..., 학습목표: [string ...], 도입: [str ...], 전개: [str ...], 정리: [str ...], 참고자료: [{name:str, url: str}, ...] }"
             }
         ],
     )
@@ -187,7 +192,6 @@ async def teach_update(teach_id: int, teach_update: schema.TeachUpdate,
             status_code=status.HTTP_400_BAD_REQUEST, detail="교수안 수정 실패")
 
     response_json = json.loads(result)
-    print(response_json)
 
     result = await crud.update_teach(
         db=db,

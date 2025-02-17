@@ -33,8 +33,6 @@ const DataContent = ({ title, data }) => {
 };
 const DataUrl = ({ title, data }) => {
 
-  console.log(data);
-
   return (
     <div className={styles.content}>
       <h4>{title}</h4>
