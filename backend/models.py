@@ -29,6 +29,7 @@ class Teaches(Base):
     intro = Column(Text, nullable=False)  # 도입
     deployment = Column(Text, nullable=False)  # 전개
     finish = Column(Text, nullable=False)  # 정리
+    ai_url = Column(Text, nullable=False)  # AI URL
     create_at = Column(DateTime, nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
 
@@ -100,3 +101,12 @@ class Commentaries(Base):
     standard_id = Column(Integer, ForeignKey("standards.id"), nullable=False)
 
     standard = relationship("Standards", back_populates="commentaries")
+
+
+class Aiurls(Base):
+    __tablename__ = "ai_urls"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    content = Column(String, nullable=False)
+    url = Column(String, nullable=False)
