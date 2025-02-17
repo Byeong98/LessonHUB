@@ -1,5 +1,5 @@
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy import MetaData
 from config import SQLALCHEMY_ASYNC_DATABASE_URL
 from sqlalchemy.orm import sessionmaker
@@ -7,8 +7,13 @@ from sqlalchemy.orm import sessionmaker
 Base = declarative_base()
 
 meta = MetaData()
-async_engine = create_async_engine(SQLALCHEMY_ASYNC_DATABASE_URL)
-async_session = async_sessionmaker(async_engine, autoflush=False, autocommit=False, expire_on_commit=False)
+async_engine = create_async_engine(SQLALCHEMY_ASYNC_DATABASE_URL, echo=True)
+
+# 비동기 세션 생성
+async_session = sessionmaker(
+    bind=async_engine, class_=AsyncSession, autoflush=False, autocommit=False, expire_on_commit=False
+)
+
 
 async def get_db():
 	# 처음 실행시
@@ -19,5 +24,5 @@ async def get_db():
     try:
         yield db
     finally:
-        await db.close()
+        db.close()
 
