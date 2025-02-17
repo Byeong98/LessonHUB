@@ -2,7 +2,7 @@ aiosqlite==0.21.0
 alembic==1.14.1
 annotated-types==0.7.0
 anyio==4.8.0
-asyncmy==0.2.10
+
 bcrypt==4.2.1
 certifi==2025.1.31
 cffi==1.17.1
@@ -66,3 +66,4 @@ uvicorn==0.34.0
 uvloop==0.21.0
 watchfiles==1.0.4
 websockets==14.2
+asyncmy==0.2.10
