@@ -31,7 +31,7 @@
 .formWrapper {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 20px; /* 요소 간 간격 */
+    gap: 20px;
     width: 100%;
 }
 
@@ -40,11 +40,14 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 100%; /* 높이 전체 확장 */
+    height: 100%; 
+    box-sizing: border-box; 
 }
+
 
 .teachForm_container {
     flex-grow: 1;
+    height: 100%;
 }
 
 .teachForm_container p {
@@ -52,6 +55,7 @@
     margin: 0;
     color: rgba(30,30,30,1);
     padding: 5 0;
+    height: 100;
 }
 
 .teachForm_container span {
@@ -62,11 +66,11 @@
 
 .truncateText {
     display: -webkit-box;
-    -webkit-line-clamp: 2; /* 최대 2줄 */
+    -webkit-line-clamp: 1; 
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 250px; /* 최대 너비 설정 */
+    max-width: 200px;
 }
 
 .dateContainer {

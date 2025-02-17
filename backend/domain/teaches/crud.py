@@ -24,6 +24,7 @@ async def create_teach(db: AsyncSession,
         intro=",".join(response_json['도입']),
         deployment=",".join(response_json['전개']),
         finish=",".join(response_json['정리']),
+        ai_url=str(response_json['참고자료']),
         create_at=datetime.now(),
         user_id=current_user_id,
     ).returning(Teaches.id)
@@ -33,8 +34,6 @@ async def create_teach(db: AsyncSession,
     return result.scalar()
 
 # 교수안 목록 조회
-
-
 async def get_teach_list(db: AsyncSession, id: int):
     query = (
         select(Teaches)
@@ -46,17 +45,13 @@ async def get_teach_list(db: AsyncSession, id: int):
     return result.scalars().all()
 
 # 교수안 조회
-
-
 async def get_teach_detail(db: AsyncSession, id: int):
     query = select(Teaches).options(selectinload(Teaches.grade),
-                   selectinload(Teaches.unit)).filter(Teaches.id == id)
+                    selectinload(Teaches.unit)).filter(Teaches.id == id)
     result = await db.execute(query)
     return result.scalar()
 
 # 교수안 수정
-
-
 async def update_teach(db: AsyncSession,
                         response_json: dict,
                         current_user_id: int,
@@ -75,6 +70,7 @@ async def update_teach(db: AsyncSession,
                 intro=",".join(response_json['도입']),
                 deployment=",".join(response_json['전개']),
                 finish=",".join(response_json['정리']),
+                ai_url=str(response_json['참고자료']),
                 create_at=datetime.now(),
                 user_id=current_user_id,
             ).returning(Teaches.id))
@@ -106,5 +102,11 @@ async def get_subjects_list(db: AsyncSession):
 async def get_filter_list(db: AsyncSession, model, filter_field: str, id: int):
     filter_column=getattr(model, filter_field)
     query=select(model).filter(filter_column == id).order_by(model.id)
+    result=await db.execute(query)
+    return result.scalars().all()
+
+
+async def get_ai_url_list(db: AsyncSession):
+    query=select(Aiurls).order_by(Aiurls.id)
     result=await db.execute(query)
     return result.scalars().all()
