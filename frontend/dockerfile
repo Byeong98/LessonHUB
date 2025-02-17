@@ -9,7 +9,7 @@ COPY ./frontend .
 
 ENV WATCHPACK_POLLING=true
 
-COPY .env.production .env
+COPY ./frontend/.env.production .env
 
 RUN npm run build
 
