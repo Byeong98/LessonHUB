@@ -32,13 +32,15 @@ RUN npm install --force
 
 COPY . .
 
-RUN npm run build
+RUN ["npm", "start"]
 
-FROM nginx:stable-alpine
+# RUN npm run build
 
-COPY ./nginx.conf /etc/nginx/nginx.conf
-COPY --from=build /app/build /usr/share/nginx/html
+# FROM nginx:stable-alpine
 
-EXPOSE 3000
+# COPY ./nginx.conf /etc/nginx/nginx.conf
+# COPY --from=build /app/build /usr/share/nginx/html
 
-CMD ["nginx", "-g", "daemon off;"]
+# EXPOSE 3000
+
+# CMD ["nginx", "-g", "daemon off;"]
