@@ -66,6 +66,8 @@ const AddTeachForm = ({ token }) => {
 const TeachList = () => {
   const [data, setData] = useState([]);
   const { accessToken } = useContext(AuthContext);
+  const baseURL = process.env.REACT_APP_BASE_URL;
+
 
   useEffect(() => {
     if (!accessToken) return;
@@ -81,7 +83,9 @@ const TeachList = () => {
       .then(response => setData(response.data))
       .catch((error) => console.error("Error fetching data:", error));
   }, [accessToken]);
-
+  
+  console.log(baseURL)
+  
   return (
     <div className={styles.container}>
       <div className={styles.content}>
