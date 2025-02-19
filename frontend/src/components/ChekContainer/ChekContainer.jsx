@@ -38,7 +38,7 @@ const CheckboxTitle = ({ options, onChange, allowDuplicates, selectedValues, set
   );
 };
 
-const ChekContainer = ({ style = "checkbox", title, optionsList, onChange, allowDuplicates = true, selectedIds }) => {
+const ChekContainer = ({ sty = "checkbox", title, optionsList, onChange, allowDuplicates = true, selectedIds }) => {
   const [selectedValues, setSelectedValues] = useState(selectedIds || []);
 
   // formData.standard_id가 변경되면 selectedValues도 업데이트
@@ -49,7 +49,7 @@ const ChekContainer = ({ style = "checkbox", title, optionsList, onChange, allow
   return (
     <div className={styles.checkbox_container}>
       <p>{title}</p>
-      <Border style={style} bgColor="rgba(245,245,245,1)">
+      <Border sty={sty} bgColor="rgba(245,245,245,1)">
         <CheckboxTitle 
         options={optionsList} 
         onChange={onChange} 

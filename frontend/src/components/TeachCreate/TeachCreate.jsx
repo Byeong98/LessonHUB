@@ -9,7 +9,7 @@ import ChekContainer from '../ChekContainer/ChekContainer';
 import LoadingOverlay from '../LoadingOverlay/LoadingOverlay';
 
 import { AuthContext } from '../../AuthProvider';
-import api from "../../api";
+import api from "../../Api";
 
 const SelectContainer = ({ data, onChange }) => {
   return (
@@ -47,27 +47,27 @@ const ButtonContainer = ({ formData, setLoading }) => {
     setLoading(false);
   }
 
-return (
-  <div className={styles.button_container}>
-    <Button
-      width="45%"
-      color='black'
-      onClick={handlTeachCreate}
-    >
-      확인
-    </Button>
-    <Button
-      width="45%"
-      onClick={() => navigate("/")}
-    >
-      취소
-    </Button>
-  </div>
-)
+  return (
+    <div className={styles.button_container}>
+      <Button
+        width="45%"
+        color='black'
+        onClick={handlTeachCreate}
+      >
+        확인
+      </Button>
+      <Button
+        width="45%"
+        onClick={() => navigate("/")}
+      >
+        취소
+      </Button>
+    </div>
+  )
 }
 
 const TeachCreate = () => {
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     grade_id: "",
     subject_id: "",
@@ -168,8 +168,8 @@ const TeachCreate = () => {
 
   return (
     <div className={styles.container}>
-      <Border style='Teach_create' bgColor="white" >
-      <LoadingOverlay loading={loading}/>
+      <Border sty='Teach_create' bgColor="white" >
+        <LoadingOverlay loading={loading} />
         <div className={styles.content_container}>
           <h3>교수안 생성</h3>
           <SelectContainer data={data} onChange={handleSelectChange} />
@@ -178,14 +178,14 @@ const TeachCreate = () => {
             allowDuplicates={false}
             onChange={(value) => handleSelectChange("unit_id", value)}
             selectedIds={formData.units_id} />
-          <ChekContainer style="checkbox_large"
+          <ChekContainer sty="checkbox_large"
             title="성취기준"
             optionsList={data.standards}
             allowDuplicates={true}
             onChange={(value) => handleSelectChange("standard_id", value)}
             selectedIds={formData.standard_id}
           />
-          <ButtonContainer formData={formData} setLoading={setLoading}/>
+          <ButtonContainer formData={formData} setLoading={setLoading} />
         </div>
       </Border>
     </div>

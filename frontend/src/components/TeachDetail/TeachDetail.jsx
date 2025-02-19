@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 import Border from '../Border/Border'
-import api from '../../api';
+import api from '../../Api';
 import { AuthContext } from '../../AuthProvider';
 import Button from '../Button/Button';
 
@@ -14,7 +14,7 @@ const DataContent = ({ title, data }) => {
   return (
     <div className={styles.content}>
       <h4>{title}</h4>
-      <Border style="teach_detail" bgColor="rgba(245,245,245,1)">
+      <Border sty="teach_detail" bgColor="rgba(245,245,245,1)">
         {data &&
           data.split(".").map((item, index) => (
             item && item
@@ -36,13 +36,13 @@ const DataUrl = ({ title, data }) => {
   return (
     <div className={styles.content}>
       <h4>{title}</h4>
-      <Border style="teach_detail" bgColor="rgba(245,245,245,1)">
+      <Border sty="teach_detail" bgColor="rgba(245,245,245,1)">
         {data && data.map((item, index) => (
           <p key={index}>
             <a href={item.url}>{item.name}</a>
           </p>
         ))}
-        
+
       </Border>
     </div>
   );
@@ -78,6 +78,7 @@ const TeachDetail = () => {
 
   useEffect(() => {
     if (!id) return;
+    if (!accessToken) return;
 
     api.get(`api/teach/get/${id}/`,
       {
@@ -89,11 +90,11 @@ const TeachDetail = () => {
     )
       .then(response => setData(response.data))
       .catch((error) => console.error("Error fetching data:", error));
-  }, [id]);
+  }, [id, accessToken]);
 
   return (
     <div className={styles.container}>
-      <Border style='teach_detail_form' bgColor="white" >
+      <Border sty='teach_detail_form' bgColor="white" >
         <div className={styles.content_container}>
           <h3>{data.title}</h3>
           <div className={styles.top_container}>
