@@ -32,7 +32,7 @@ RUN npm install --force
 
 COPY . .
 
-RUN ["npm", "start"]
+CMD ["npm", "start"]
 
 # RUN npm run build
 
