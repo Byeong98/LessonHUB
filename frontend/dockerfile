@@ -1,42 +1,43 @@
-FROM node:alpine AS build
-WORKDIR /app
-
-COPY ./frontend/package.json .
-
-RUN npm install
-
-COPY ./frontend .
-
-ENV WATCHPACK_POLLING=true
-
-COPY ./frontend/.env .env
-
-RUN npm run build
-
-
-FROM nginx:stable-alpine
-
-COPY frontend/nginx.conf /etc/nginx/nginx.conf
-COPY --from=build /app/build /usr/share/nginx/html
-EXPOSE 3000
-
-CMD ["nginx", "-g", "daemon off;"]
-
-
 # FROM node:alpine AS build
 # WORKDIR /app
 
 # COPY ./frontend/package.json .
 
-# RUN npm install --force
+# RUN npm install
 
 # COPY ./frontend .
 
 # ENV WATCHPACK_POLLING=true
 
-# COPY ./frontend/.env.production .env
+# COPY ./frontend/.env .env
 
+# RUN npm run build
+
+
+# FROM nginx:stable-alpine
+
+# COPY frontend/nginx.conf /etc/nginx/nginx.conf
+# COPY --from=build /app/build /usr/share/nginx/html
 # EXPOSE 3000
 
-# CMD ["npm", "start"]
+# CMD ["nginx", "-g", "daemon off;"]
 
+
+FROM node:alpine AS build
+WORKDIR /app
+
+COPY ./frontend/package.json .
+
+RUN npm install --force
+
+COPY ./frontend .
+
+RUN npm run build
+
+FROM nginx:stable-alpine
+
+COPY ./frontend/nginx.conf /etc/nginx/nginx.conf
+COPY --from=build /app/build /usr/share/nginx/html
+EXPOSE 3000
+
+CMD ["nginx", "-g", "daemon off;"]
