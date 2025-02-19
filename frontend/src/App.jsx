@@ -13,10 +13,10 @@ import { AuthProvider } from './AuthProvider';
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
+    <Router basename={process.env.PUBLIC_URL}>
+      <AuthProvider>
         <div className="routes_container">
-        <NavBar />
+          <NavBar />
           <Routes >
             <Route path="/" element={<TeachList />} />
             <Route path="/teach/create" element={<TeachCreate />} />
@@ -26,8 +26,8 @@ function App() {
             <Route path="/signup" element={<SignUp />} />
           </Routes>
         </div>
-      </Router>
-    </AuthProvider>
+      </AuthProvider>
+    </Router>
   );
 }
 
