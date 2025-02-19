@@ -1,13 +1,12 @@
 import React, { useState, useContext } from 'react'
 import styles from './Login.module.css'
-import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 
 import Border from '../Border/Border'
 import Button from '../Button/Button'
 import InputTitle from '../InputTitle/InputTitle'
 import { AuthContext } from '../../AuthProvider'
-import api from '../../api';
+import api from '../../Api';
 
 
 const InputContainer = () => {
@@ -30,7 +29,7 @@ const InputContainer = () => {
       return false;
     }
     if (!password) {
-      alert('비��번호를 입력하세요.');
+      alert('비밀번호를 입력하세요.');
       return false;
     }
     return true;
@@ -44,7 +43,6 @@ const InputContainer = () => {
         formData,
         {
           headers: {
-            // "Content-Type": "application/json",
             "Content-Type": "application/x-www-form-urlencoded"
           }
         }
@@ -55,16 +53,16 @@ const InputContainer = () => {
       });
       setAccessToken(response.data.access_token);
       setUserEmail(response.data.email);
-      
+
       navigate("/");
       setTimeout(() => {
         window.location.reload(); // 강제 새로고침
-    }, 100);
+      }, 100);
     } catch (error) {
       alert(error.response.data.detail)
     }
   };
-  
+
   return (
     <div className={styles.input_Container}>
       <h2 className={styles.h2}>로그인</h2>
@@ -94,7 +92,7 @@ const Login = () => {
 
   return (
     <div className={styles.container}>
-      <Border style='login' bgColor="white" >
+      <Border sty='login' bgColor="white" >
         <InputContainer />
       </Border>
     </div>

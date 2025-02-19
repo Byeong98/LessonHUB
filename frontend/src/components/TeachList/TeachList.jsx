@@ -3,14 +3,14 @@ import styles from './TeachList.module.css'
 import { Link, useNavigate } from 'react-router-dom'
 
 import Border from '../Border/Border'
-import api from '../../api';
+import api from '../../Api';
 import { AuthContext } from '../../AuthProvider';
 
 const TeachForm = ({ item }) => {
 
   return (
     <Link to={`/teach/detail/${item.id}`}>
-      <Border style='teach_list' bgColor="rgba(245,245,245,1)">
+      <Border sty='teach_list' bgColor="rgba(245,245,245,1)">
         <div className={styles.teachForm_padding}>
           <div className={styles.teachForm_container}>
             <p>
@@ -39,7 +39,7 @@ const TeachForm = ({ item }) => {
   )
 }
 
-const AddTeachForm = ({token}) => {
+const AddTeachForm = ({ token }) => {
   const navigate = useNavigate();
 
   const handleClick = (e) => {
@@ -52,7 +52,7 @@ const AddTeachForm = ({token}) => {
 
   return (
     <Link to="/teach/create" onClick={handleClick}>
-      <Border style="teach_list" bgColor="rgba(245,245,245,1)">
+      <Border sty="teach_list" bgColor="rgba(245,245,245,1)">
         <div className={styles.add_container}>
           <img src="/add.png" alt="lessonhub" className={styles.addbut} />
           <p>추가하기</p>
@@ -87,16 +87,16 @@ const TeachList = () => {
       <div className={styles.content}>
         <h1>교수안</h1>
         <div className={styles.formWrapper}>
-          <AddTeachForm token={accessToken}/>
-          {data.length !== 0  ? (
+          <AddTeachForm token={accessToken} />
+          {data.length !== 0 ? (
             data.map(item => <TeachForm key={item.id} item={item} />)
           ) : (
-            <Border style='teach_list' bgColor="rgba(245,245,245,1)">
-            <div className={styles.add_container}>
-              <p></p>
-              <p>교수안을 추가하세요.</p>
-            </div>
-          </Border>
+            <Border sty='teach_list' bgColor="rgba(245,245,245,1)">
+              <div className={styles.add_container}>
+                <p></p>
+                <p>교수안을 추가하세요.</p>
+              </div>
+            </Border>
           )}
         </div>
       </div>
