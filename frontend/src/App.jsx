@@ -6,16 +6,17 @@ import TeachCreate from './components/TeachCreate/TeachCreate';
 import TeachDetail from './components/TeachDetail/TeachDetail';
 import TeachUpdate from './components/TeachUpdate/TeachUpdate';
 import Login from './components/Login/Login';
-import NavBar from './components/NavBar/NavBar';
 import SignUp from './components/SignUp/SignUp';
+import NavBar from './components/NavBar/NavBar';
+
 import { AuthProvider } from './AuthProvider';
 
 function App() {
   return (
     <AuthProvider>
       <Router>
-        <NavBar />
         <div className="routes_container">
+        <NavBar />
           <Routes >
             <Route path="/" element={<TeachList />} />
             <Route path="/teach/create" element={<TeachCreate />} />
