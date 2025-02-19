@@ -4,7 +4,7 @@ import styles from "./TeachUpdate.module.css";
 
 import Border from '../Border/Border';
 import Button from '../Button/Button';
-import api from '../../api';
+import api from '../../Api';
 import LoadingOverlay from '../LoadingOverlay/LoadingOverlay';
 import { AuthContext } from '../../AuthProvider';
 
@@ -59,7 +59,7 @@ const DataContent = ({ title, value, onChange }) => {
     setInputValue(newValue); 
     onChange(newValue); 
   };
-
+  if (!inputValue) return;
   return (
     <div className={styles.content}>
       <h4>{title}</h4>
@@ -143,12 +143,12 @@ const TeachUpdate = () => {
       [key]: value,
     }));
   };
-  console.log(Data)
-  console.log(formData)
+
+  
   return (
     <div className={styles.container}>
       <LoadingOverlay loading={loading}/>
-      <Border style="teach_detail_form" bgColor="white">
+      <Border sty="teach_detail_form" bgColor="white">
         <div className={styles.content_container}>
           <h3>교수안(수정)</h3>
           <p className={styles.title}

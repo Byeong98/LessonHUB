@@ -5,8 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Border from '../Border/Border'
 import Button from '../Button/Button'
 import InputTitle from '../InputTitle/InputTitle'
-import axios from "axios";
-import api from '../../api';
+import api from '../../Api';
 
 const InputContainer = () => {
     const navigate = useNavigate();
@@ -41,7 +40,7 @@ const InputContainer = () => {
     const handlSignUP = async () => {
         if (!validate_data()) return;
         try {
-            const response = await api.post(
+            await api.post(
                 "/api/user/create/",
                 formData,
                 {
@@ -104,7 +103,7 @@ const InputContainer = () => {
 const SignUp = () => {
     return (
         <div className={styles.container}>
-            <Border style='signup' bgColor="white" >
+            <Border sty='signup' bgColor="white" >
                 <InputContainer />
             </Border>
         </div>
