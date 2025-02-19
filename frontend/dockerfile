@@ -9,7 +9,7 @@
 
 # ENV WATCHPACK_POLLING=true
 
-# COPY ./frontend/.env .env
+# COPY ./frontend/.env.development .env
 
 # RUN npm run build
 
@@ -26,21 +26,23 @@
 FROM node:alpine AS build
 WORKDIR /app
 
-COPY ./package.json .
+COPY ./frontend/package.json .
 
 RUN npm install --force
 
-COPY . .
+COPY ./frontend .
 
-CMD ["npm", "start"]
+COPY ./frontend/.env.development .env
 
-# RUN npm run build
+# CMD ["npm", "start"]
 
-# FROM nginx:stable-alpine
+RUN npm run build
 
-# COPY ./nginx.conf /etc/nginx/nginx.conf
-# COPY --from=build /app/build /usr/share/nginx/html
+FROM nginx:stable-alpine
 
-# EXPOSE 3000
+COPY ./nginx.conf /etc/nginx/nginx.conf
+COPY --from=build /app/build /usr/share/nginx/html
 
-# CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 3000
+
+CMD ["nginx", "-g", "daemon off;"]
