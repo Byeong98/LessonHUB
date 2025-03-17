@@ -8,8 +8,8 @@ class Users(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True)
-    email = Column(String, unique=True, nullable=False)
-    password = Column(String, nullable=False)
+    email = Column(String(100), unique=True, nullable=False)
+    password = Column(String(100), nullable=False)
     create_at = Column(DateTime, nullable=False)
 
     teaches = relationship("Teaches", back_populates="user")
@@ -21,10 +21,10 @@ class Teaches(Base):
 
     id = Column(Integer, primary_key=True)
     grade_id = Column(Integer, ForeignKey("grades.id"), nullable=False)  # 학년
-    subject = Column(String, nullable=False)  # 과목
-    section = Column(String, nullable=False)  # 과목 상세 (예: 국어, 수학 ...)
+    subject = Column(String(100), nullable=False)  # 과목
+    section = Column(String(100), nullable=False)  # 과목 상세 (예: 국어, 수학 ...)
     unit_id = Column(Integer, ForeignKey("units.id"), nullable=False)  # 단원
-    title = Column(String, nullable=False)  # 제목
+    title = Column(String(255), nullable=False)  # 제목
     objective = Column(Text, nullable=False)  # 학습목표
     intro = Column(Text, nullable=False)  # 도입
     deployment = Column(Text, nullable=False)  # 전개
@@ -42,7 +42,7 @@ class Grades(Base):
     __tablename__ = "grades"
 
     id = Column(Integer, primary_key=True)
-    title = Column(String, nullable=False)
+    title = Column(String(100), nullable=False)
 
     teach_list = relationship("Teaches", back_populates="grade")
 
@@ -52,7 +52,7 @@ class Subjects(Base):
     __tablename__ = "subjects"
 
     id = Column(Integer, primary_key=True)
-    title = Column(String, nullable=False)
+    title = Column(String(100), nullable=False)
 
     sections = relationship("Sections", back_populates="subject")
 
@@ -61,7 +61,7 @@ class Sections(Base):
     __tablename__ = "sections"
 
     id = Column(Integer, primary_key=True)
-    title = Column(String, nullable=False)
+    title = Column(String(100), nullable=False)
     subject_id = Column(Integer, ForeignKey("subjects.id"), nullable=False)
 
     subject = relationship("Subjects", back_populates="sections")
@@ -73,7 +73,7 @@ class Units(Base):
     __tablename__ = "units"
 
     id = Column(Integer, primary_key=True)
-    title = Column(String, nullable=False)
+    title = Column(String(100), nullable=False)
     section_id = Column(Integer, ForeignKey("sections.id"), nullable=False)
 
     section = relationship("Sections", back_populates="units")
@@ -85,7 +85,7 @@ class Standards(Base):
     __tablename__ = "standards"
 
     id = Column(Integer, primary_key=True)
-    title = Column(String, nullable=False)
+    title = Column(String(4000), nullable=False)
     unit_id = Column(Integer, ForeignKey("units.id"), nullable=False)
 
     unit = relationship("Units", back_populates="standards")
@@ -97,7 +97,7 @@ class Commentaries(Base):
     __tablename__ = "commentaries"
 
     id = Column(Integer, primary_key=True)
-    title = Column(String, nullable=False)
+    title = Column(String(4000), nullable=False)
     standard_id = Column(Integer, ForeignKey("standards.id"), nullable=False)
 
     standard = relationship("Standards", back_populates="commentaries")
@@ -107,6 +107,6 @@ class Aiurls(Base):
     __tablename__ = "ai_urls"
 
     id = Column(Integer, primary_key=True)
-    name = Column(String, nullable=False)
-    content = Column(String, nullable=False)
-    url = Column(String, nullable=False)
+    name = Column(String(255), nullable=False)
+    content = Column(String(4000), nullable=False)
+    url = Column(String(255), nullable=False)
