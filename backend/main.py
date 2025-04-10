@@ -22,6 +22,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/")
+async def read_main():
+    return {"msg": "Holle FastAPI"}
+
 app.include_router(users_router.router)
 app.include_router(teach_router.router)
 
