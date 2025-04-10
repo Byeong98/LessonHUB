@@ -6,10 +6,9 @@ from main import app
 client = TestClient(app)
     
 def test_teach_grades():
-    response = client.get("api/teach/grades")
+    response = client.get("/")
     assert response.status_code == 200
-    # data = response.json()
-    # assert isinstance(data, list)
+    assert response.json() == {"msg": "Holle FastAPI"}
 
 
 
