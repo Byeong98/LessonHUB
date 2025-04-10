@@ -19,8 +19,9 @@ jobs:
       - name: Install dependencies
         run: pip install -r backend/requirements.txt
 
-      - name: Set environment variable
+      - name: Set environment variable 
         run: echo "SQLALCHEMY_ASYNC_DATABASE_URL=${{ secrets.SQLALCHEMY_ASYNC_DATABASE_URL }}" >> $GITHUB_ENV
+        run: echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> $GITHUB_ENV
 
       - name: Run tests
         run: |
