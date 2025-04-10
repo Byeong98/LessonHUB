@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 import Border from '../Border/Border'
-import api from '../../Api';
+import ApiClient from '../../ApiClient';
 import { AuthContext } from '../../AuthProvider';
 import Button from '../Button/Button';
 
@@ -80,7 +80,7 @@ const TeachDetail = () => {
     if (!id) return;
     if (!accessToken) return;
 
-    api.get(`api/teach/get/${id}/`,
+    ApiClient.get(`api/teach/get/${id}/`,
       {
         headers: {
           "Content-Type": "application/json",

@@ -3,7 +3,7 @@ import styles from './TeachList.module.css'
 import { Link, useNavigate } from 'react-router-dom'
 
 import Border from '../Border/Border'
-import api from '../../Api';
+import ApiClient from '../../ApiClient';
 import { AuthContext } from '../../AuthProvider';
 
 const TeachForm = ({ item }) => {
@@ -72,7 +72,7 @@ const TeachList = () => {
   useEffect(() => {
     if (!accessToken) return;
 
-    api.get(`/api/teach/list/`,
+    ApiClient.get(`/api/teach/list/`,
       {
         headers: {
           "Content-Type": "application/json",

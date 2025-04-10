@@ -4,7 +4,7 @@ import styles from "./TeachUpdate.module.css";
 
 import Border from '../Border/Border';
 import Button from '../Button/Button';
-import api from '../../Api';
+import ApiClient from '../../ApiClient';
 import LoadingOverlay from '../LoadingOverlay/LoadingOverlay';
 import { AuthContext } from '../../AuthProvider';
 
@@ -84,7 +84,7 @@ const ButtonContainer = ({ id, data, setLoading }) => {
 
     setLoading(true);
     try {
-      const response = await api.put(
+      const response = await ApiClient.put(
         `/api/teach/update/${id}/`,
         data,
         {
