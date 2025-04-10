@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from pydantic import BaseModel, field_validator, EmailStr
-from pydantic_core.core_schema import FieldValidationInfo
+from pydantic_core.core_schema import ValidationInfo
 
 
 # 회원가입 스키마
@@ -18,7 +18,7 @@ class UserCreate(BaseModel):
         return v
     
     @field_validator('password2')
-    def password_match(cls, v, info: FieldValidationInfo):
+    def password_match(cls, v, info: ValidationInfo):
         if 'password1' in info.data and v != info.data['password1']:
             raise ValueError('비밀번호가 일치하지 않습니다.')
         return v
