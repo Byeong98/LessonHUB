@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Border from '../Border/Border'
 import Button from '../Button/Button'
 import InputTitle from '../InputTitle/InputTitle'
-import api from '../../Api';
+import ApiClient from '../../ApiClient';
 
 const InputContainer = () => {
     const navigate = useNavigate();
@@ -40,7 +40,7 @@ const InputContainer = () => {
     const handlSignUP = async () => {
         if (!validate_data()) return;
         try {
-            await api.post(
+            await ApiClient.post(
                 "/api/user/create/",
                 formData,
                 {

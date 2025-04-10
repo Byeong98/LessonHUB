@@ -6,7 +6,7 @@ import Border from '../Border/Border'
 import Button from '../Button/Button'
 import InputTitle from '../InputTitle/InputTitle'
 import { AuthContext } from '../../AuthProvider'
-import api from '../../Api';
+import ApiClient from '../../ApiClient';
 
 
 const InputContainer = () => {
@@ -38,7 +38,7 @@ const InputContainer = () => {
   const handleLogin = async () => {
     if (!validate_data()) return;
     try {
-      const response = await api.post(
+      const response = await ApiClient.post(
         "/api/user/login/",
         formData,
         {
