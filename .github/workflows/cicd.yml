@@ -19,8 +19,8 @@ jobs:
       - name: Install dependencies
         run: pip install -r backend/requirements.txt
 
-      - name: Set environment variables
-        run: echo "SQLALCHEMY_ASYNC_DATABASE_URL=${{ secrets.SQLALCHEMY_ASYNC_DATABASE_URL }}"
+      - name: Set environment variable
+        run: echo "SQLALCHEMY_ASYNC_DATABASE_URL=${{ secrets.SQLALCHEMY_ASYNC_DATABASE_URL }}" >> $GITHUB_ENV
 
       - name: Run tests
         run: |
