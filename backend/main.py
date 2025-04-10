@@ -11,9 +11,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-app = FastAPI(
-
-)
+app = FastAPI()
 
 # CORS 설정
 app.add_middleware(

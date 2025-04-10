@@ -9,7 +9,7 @@ import ChekContainer from '../ChekContainer/ChekContainer';
 import LoadingOverlay from '../LoadingOverlay/LoadingOverlay';
 
 import { AuthContext } from '../../AuthProvider';
-import api from "../../Api";
+import ApiClient from "../../ApiClient";
 
 const SelectContainer = ({ data, onChange }) => {
   return (
@@ -30,7 +30,7 @@ const ButtonContainer = ({ formData, setLoading }) => {
 
     setLoading(true);
     try {
-      const response = await api.post(
+      const response = await ApiClient.post(
         "/api/teach/create/",
         formData,
         {
@@ -86,8 +86,8 @@ const TeachCreate = () => {
   // 학년 + 과목 데이터 가져오기
   useEffect(() => {
     Promise.all([
-      api.get("/api/teach/grades/"),
-      api.get("/api/teach/subjects/")
+      ApiClient.get("/api/teach/grades/"),
+      ApiClient.get("/api/teach/subjects/")
     ])
       .then(([gradesRes, subjectsRes]) => {
         setData({
@@ -117,7 +117,7 @@ const TeachCreate = () => {
       standards: []
     }));
 
-    api.get(`api/teach/${Number(formData.subject_id)}/sections/`)
+    ApiClient.get(`api/teach/${Number(formData.subject_id)}/sections/`)
       .then(response => setData(prev => ({
         ...prev,
         sections: response.data,
@@ -135,7 +135,7 @@ const TeachCreate = () => {
       standards: []
     }));
 
-    api.get(`api/teach/${Number(formData.section_id)}/units/`)
+    ApiClient.get(`api/teach/${Number(formData.section_id)}/units/`)
       .then(response => setData(prev => ({
         ...prev,
         units: response.data,
@@ -157,7 +157,7 @@ const TeachCreate = () => {
       standard_id: []
     }));
 
-    api.get(`api/teach/${Number(formData.unit_id)}/standards/`)
+    ApiClient.get(`api/teach/${Number(formData.unit_id)}/standards/`)
       .then(response => setData(prev => ({
         ...prev,
         standards: response.data,
