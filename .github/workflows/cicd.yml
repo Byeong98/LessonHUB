@@ -45,7 +45,7 @@ jobs:
       - name: Docker-compose Deploy
         run: |
           ssh ubuntu@140.245.75.185 << 'EOF'
-            cd /home/ubuntu/project
+            cd cheese
             git pull origin main
             docker-compose up --build -d
           EOF
