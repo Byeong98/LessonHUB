@@ -28,3 +28,24 @@ jobs:
         run: |
           cd backend
           pytest
+  
+  deploy:
+    needs: test
+    if: success()
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.ORACLE_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H 140.245.75.185 >> ~/.ssh/known_hosts
+      
+      - name: Docker-compose Deploy
+        run: |
+          ssh ubuntu@140.245.75.185 << 'EOF'
+            cd /home/ubuntu/project
+            git pull origin main
+            docker-compose up --build -d
+          EOF
