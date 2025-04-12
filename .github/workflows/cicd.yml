@@ -48,6 +48,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # caching 적용 전
       # - name: Docker login & build & push
       #   run: |
       #     echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
