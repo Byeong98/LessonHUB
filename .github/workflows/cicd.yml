@@ -15,6 +15,15 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.13"
+      
+      # 캐싱 추가
+      - name: Cache pip dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ubuntu-latest-pip-${{ hashFiles('backend/requirements.txt') }}
+          restore-keys: |
+            ubuntu-latest-pip-
 
       - name: Install dependencies
         run: pip install -r backend/requirements.txt
@@ -29,35 +38,36 @@ jobs:
           cd backend
           pytest
 
-  deploy: 
-    needs: test
-    if: success()
-    runs-on: ubuntu-22.04
+  # 이미지 기반 배포
+  # deploy: 
+  #   needs: test
+  #   if: success()
+  #   runs-on: ubuntu-22.04
     
-    steps: 
-      - name: Checkout repository
-        uses: actions/checkout@v3
+  #   steps: 
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v3
 
-      - name: Docker login & build & push
-        run: |
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/lessonhub_image:latest -f backend/Dockerfile .
-          docker push ${{ secrets.DOCKER_USERNAME }}/lessonhub_image
+  #     - name: Docker login & build & push
+  #       run: |
+  #         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+  #         docker build -t ${{ secrets.DOCKER_USERNAME }}/lessonhub_image:latest -f backend/Dockerfile .
+  #         docker push ${{ secrets.DOCKER_USERNAME }}/lessonhub_image
 
-      - name: Setup SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.ORACLE_SSH_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H 140.245.75.185 >> ~/.ssh/known_hosts
+  #     - name: Setup SSH
+  #       run: |
+  #         mkdir -p ~/.ssh
+  #         echo "${{ secrets.ORACLE_SSH_KEY }}" > ~/.ssh/id_ed25519
+  #         chmod 600 ~/.ssh/id_ed25519
+  #         ssh-keyscan -H 140.245.75.185 >> ~/.ssh/known_hosts
 
-      - name: Docker compose run on Oracle
-        run: |
-          ssh ubuntu@140.245.75.185 << 'EOF'
-            docker pull ${{ secrets.DOCKER_USERNAME }}/lessonhub_image:latest
-            cd cheese
-            docker-compose up -d
-          EOF
+  #     - name: Docker compose run on Oracle
+  #       run: |
+  #         ssh ubuntu@140.245.75.185 << 'EOF'
+  #           docker pull ${{ secrets.DOCKER_USERNAME }}/lessonhub_image:latest
+  #           cd cheese
+  #           docker-compose up -d
+  #         EOF
 
 
   # 코드 기방 배포
