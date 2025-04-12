@@ -45,9 +45,6 @@ jobs:
     runs-on: ubuntu-22.04
     
     steps: 
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
       # caching 적용 전
       # - name: Docker login & build & push
       #   run: |
