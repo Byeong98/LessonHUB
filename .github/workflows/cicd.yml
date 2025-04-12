@@ -28,24 +28,41 @@ jobs:
         run: |
           cd backend
           pytest
-  
-  deploy:
+
+  deploy: 
     needs: test
     if: success()
     runs-on: ubuntu-22.04
+    
+    steps: 
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    steps:
-      - name: Setup SSH
+      - name: Docker login & build & push
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.ORACLE_SSH_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H 140.245.75.185 >> ~/.ssh/known_hosts
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/lessonhub_image:latest -f backend/Dockerfile .
+          docker push ${{ secrets.DOCKER_USERNAME }}/lessonhub_image
+
+
+  # 코드 기방 배포
+  # deploy:
+  #   needs: test
+  #   if: success()
+  #   runs-on: ubuntu-22.04
+
+  #   steps:
+  #     - name: Setup SSH
+  #       run: |
+  #         mkdir -p ~/.ssh
+  #         echo "${{ secrets.ORACLE_SSH_KEY }}" > ~/.ssh/id_ed25519
+  #         chmod 600 ~/.ssh/id_ed25519
+  #         ssh-keyscan -H 140.245.75.185 >> ~/.ssh/known_hosts
       
-      - name: Docker-compose Deploy
-        run: |
-          ssh ubuntu@140.245.75.185 << 'EOF'
-            cd cheese
-            git pull origin main
-            docker-compose up --build -d
-          EOF
+  #     - name: Docker-compose Deploy
+  #       run: |
+  #         ssh ubuntu@140.245.75.185 << 'EOF'
+  #           cd cheese
+  #           git pull origin main
+  #           docker-compose up --build -d
+  #         EOF
