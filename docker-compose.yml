@@ -1,9 +1,10 @@
 services:
   backend:
-    container_name: backend
-    build:
-      context: .
-      dockerfile: backend/dockerfile
+    container_name: lessonhub_backend_container 
+    image: byeong98/lessonhub_image:latest
+    # build:
+    #   context: .
+    #   dockerfile: backend/dockerfile
     volumes:
       - ./backend/sqlite.db:/app/sqlite.db
       - ./backend/.env:/app/.env
